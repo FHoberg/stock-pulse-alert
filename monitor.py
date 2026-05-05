@@ -198,7 +198,9 @@ def keyword_classify(item: dict) -> dict:
 
     impact = 1
     reason = "Routine."
-    tickers: list[str] = []
+    direction = "unclear"
+    tickers: list[dict] = []
+    is_macro = False
 
     if source == "SEC 8-K":
         codes = re.findall(r"item\s+(\d+\.\d+)", text)
@@ -212,6 +214,11 @@ def keyword_classify(item: dict) -> dict:
         m = re.search(r"8-K\s*-\s*([^\(]+)", item["title"])
         company = (m.group(1).strip().rstrip(",.") if m else "")
         reason = f"{best_label}{(' for ' + company) if company else ''}."
+        # Coarse direction guess from item code semantics
+        if any(c in codes for c in ("1.03", "2.04", "2.06", "3.01", "4.02")):
+            direction = "down"
+        elif "2.01" in codes:
+            direction = "up"
 
     elif source == "Trump":
         if not text.strip():
@@ -222,15 +229,29 @@ def keyword_classify(item: dict) -> dict:
                 if hit and score > impact:
                     impact = score
                     reason = f"Mentions '{hit}'."
+                    is_macro = True
+                    if hit in ("tariff", "tariffs", "sanction", "sanctions",
+                              "embargo", "rate hike", "shutdown", "default",
+                              "recession"):
+                        direction = "down"
+                    elif hit in ("trade deal", "rate cut"):
+                        direction = "up"
 
     elif source == "Fed":
+        is_macro = True
         for score, kws in FED_KEYWORDS.items():
             hit = next((kw for kw in kws if kw in text), None)
             if hit and score > impact:
                 impact = score
                 reason = f"Fed press mentioning '{hit}'."
 
-    return {"impact": impact, "tickers": tickers, "reason": reason}
+    return {
+        "impact": impact,
+        "direction": direction,
+        "summary": reason,
+        "tickers": tickers,
+        "is_macro": is_macro,
+    }
 
 
 def llm_classify(items: list[dict], api_key: str) -> list[dict]:
@@ -238,15 +259,15 @@ def llm_classify(items: list[dict], api_key: str) -> list[dict]:
     import http.client
 
     system = (
-        "You are a financial news triage system. For each news item, estimate "
-        "market impact 1-10 and list affected tickers.\n\n"
-        "IMPACT CALIBRATION:\n"
-        "1-3: routine (compensation amendments, regular dividends, personal "
+        "You are a financial news triage system. For each news item, produce "
+        "a structured impact assessment a retail investor can act on.\n\n"
+        "IMPACT CALIBRATION (1-10):\n"
+        "  1-3: routine (compensation amendments, regular dividends, personal "
         "posts, empty content)\n"
-        "4-6: notable but unlikely to move stocks much\n"
-        "7: meaningful (1-3% move likely on relevant ticker)\n"
-        "8: significant (3-7% move OR sector-wide effect)\n"
-        "9-10: major (large moves, broad market impact)\n\n"
+        "  4-6: notable but unlikely to move stocks much\n"
+        "  7: meaningful (1-3% move likely on relevant ticker)\n"
+        "  8: significant (3-7% move OR sector-wide effect)\n"
+        "  9-10: major (large moves, broad market impact)\n\n"
         "SEC 8-K — calibrate by Item code:\n"
         "  1.01, 1.02, 2.01, 2.05, 2.06, 4.01, 4.02, 5.02 -> typically 7+\n"
         "  1.03 (bankruptcy), 5.01 (change of control) -> 8-9\n"
@@ -257,11 +278,24 @@ def llm_classify(items: list[dict], api_key: str) -> list[dict]:
         "political content unrelated to economy -> 1-3. Empty -> 1.\n\n"
         "Fed: rate decisions, FOMC statements, emergency actions -> 8+. "
         "Stress tests, big bank rules -> 6-7. Routine speeches -> 2-4.\n\n"
-        "OUTPUT: Reply with a raw JSON array, no prose, no markdown fences. "
-        "One object per input item, in order: "
-        '{"impact": int 1-10, "tickers": [string up to 5], '
-        '"reason": string one sentence}. '
-        "Use empty tickers list if macro-only."
+        "OUTPUT SCHEMA per item (one JSON object, in input order):\n"
+        '  "impact": int 1-10\n'
+        '  "direction": "up" | "down" | "mixed" | "unclear"\n'
+        '  "summary": ONE plain-English sentence (15-35 words) explaining '
+        "what happened and WHY it would push the stock(s) up or down. Be "
+        "concrete (mention magnitudes, sectors, mechanism if relevant). "
+        "Avoid jargon.\n"
+        '  "tickers": list of up to 4 objects {"symbol": str, "name": str, '
+        '"isin": str (OPTIONAL — include ONLY if you are certain; never '
+        "guess an ISIN; omit the field entirely when unsure)}.\n"
+        "      - If specific companies are named in the news, list those.\n"
+        "      - If the news is macro-only (tariffs, rates, geopolitics), "
+        "list 1-2 BELLWETHER instruments most likely to move (e.g. SPY for "
+        "broad US market, QQQ for tech, SOXX for semis, XLE for energy, "
+        "TLT for long-duration treasuries, EWZ for Brazil, MCHI for China).\n"
+        '  "is_macro": bool — true if tickers are illustrative bellwethers '
+        "rather than companies directly named in the news.\n\n"
+        "Reply with a raw JSON array, no prose, no markdown fences."
     )
 
     user_payload = json.dumps([
@@ -272,7 +306,7 @@ def llm_classify(items: list[dict], api_key: str) -> list[dict]:
 
     body = json.dumps({
         "model": "claude-haiku-4-5-20251001",
-        "max_tokens": 2048,
+        "max_tokens": 4096,
         "system": system,
         "messages": [{
             "role": "user",
@@ -308,13 +342,41 @@ def llm_classify(items: list[dict], api_key: str) -> list[dict]:
             f"for {len(items)} items"
         )
 
-    # Normalize fields
+    # Normalize fields. Be tolerant of older "reason" key and string tickers
+    # in case the model deviates from the schema.
     out: list[dict] = []
     for cls in parsed:
+        raw_tickers = cls.get("tickers") or []
+        tickers: list[dict] = []
+        for t in raw_tickers[:4]:
+            if isinstance(t, dict):
+                sym = str(t.get("symbol") or t.get("ticker") or "").strip()
+                if not sym:
+                    continue
+                entry = {"symbol": sym}
+                if t.get("name"):
+                    entry["name"] = str(t["name"])[:80]
+                isin = (t.get("isin") or "").strip()
+                # ISIN is exactly 12 alphanumeric chars (2-letter country prefix).
+                # Drop anything that doesn't match — better silent than a bogus ID.
+                if re.fullmatch(r"[A-Z]{2}[A-Z0-9]{9}[0-9]", isin):
+                    entry["isin"] = isin
+                tickers.append(entry)
+            elif isinstance(t, str) and t.strip():
+                tickers.append({"symbol": t.strip()})
+
+        direction = str(cls.get("direction", "unclear")).lower().strip()
+        if direction not in ("up", "down", "mixed", "unclear"):
+            direction = "unclear"
+
+        summary = str(cls.get("summary") or cls.get("reason") or "")[:400]
+
         out.append({
             "impact": int(cls.get("impact", 1)),
-            "tickers": [str(t) for t in (cls.get("tickers") or [])][:5],
-            "reason": str(cls.get("reason", ""))[:300],
+            "direction": direction,
+            "summary": summary,
+            "tickers": tickers,
+            "is_macro": bool(cls.get("is_macro", False)),
         })
     return out
 
@@ -334,26 +396,80 @@ def classify(items: list[dict]) -> list[dict]:
 
 # ---------- Notification ----------
 
+DIRECTION_GLYPH = {
+    "up": "UP",
+    "down": "DOWN",
+    "mixed": "MIXED",
+    "unclear": "?",
+}
+
+DIRECTION_TAG = {
+    "up": "chart_with_upwards_trend",
+    "down": "chart_with_downwards_trend",
+    "mixed": "left_right_arrow",
+    "unclear": "grey_question",
+}
+
+
+def _format_ticker_line(t: dict) -> str:
+    sym = t.get("symbol", "?")
+    name = t.get("name")
+    isin = t.get("isin")
+    extras = []
+    if name:
+        extras.append(name)
+    if isin:
+        extras.append(f"ISIN {isin}")
+    suffix = f" ({', '.join(extras)})" if extras else ""
+    return f"  - {sym}{suffix}"
+
+
 def ntfy_post(item: dict, classification: dict, retries: int = 2) -> bool:
     if not NTFY_TOPIC:
         return False
 
     impact = classification["impact"]
+    direction = classification.get("direction", "unclear")
     tickers = classification.get("tickers") or []
-    reason = classification.get("reason", "")
+    summary = (classification.get("summary")
+               or classification.get("reason") or "").strip()
+    is_macro = classification.get("is_macro", False)
 
-    ticker_str = ",".join(tickers) if tickers else "macro"
-    title = f"[{item['source']}] {ticker_str} (impact {impact})"
+    # Title: short, scannable. Format example:
+    #   [Trump] DOWN i8 - SOXX, NVDA
+    if tickers:
+        ticker_label = ", ".join(
+            (t.get("symbol", "?") if isinstance(t, dict) else str(t))
+            for t in tickers[:3]
+        )
+    else:
+        ticker_label = "macro"
+    title = (
+        f"[{item['source']}] {DIRECTION_GLYPH.get(direction, '?')} "
+        f"i{impact} - {ticker_label}"
+    )
 
-    body_lines = [item["title"], "", reason]
+    # Body: headline, plain-English summary, ticker list, link.
+    body_lines: list[str] = [item["title"]]
+    if summary:
+        body_lines += ["", summary]
+    if tickers:
+        heading = "Likely affected (bellwether examples):" if is_macro \
+                  else "Affected:"
+        body_lines += ["", heading]
+        for t in tickers:
+            if isinstance(t, dict):
+                body_lines.append(_format_ticker_line(t))
+            else:
+                body_lines.append(f"  - {t}")
     if item.get("link"):
-        body_lines.extend(["", item["link"]])
+        body_lines += ["", item["link"]]
     body = "\n".join(body_lines).encode("utf-8")
 
     headers = {
         "Title": title.encode("utf-8"),
         "Priority": "high",
-        "Tags": "chart_with_upwards_trend",
+        "Tags": DIRECTION_TAG.get(direction, "chart_with_upwards_trend"),
     }
     if item.get("link"):
         headers["Click"] = item["link"]
@@ -429,9 +545,16 @@ def main() -> int:
     for item, cls in zip(new_items, classifications):
         if cls["impact"] >= ALERT_THRESHOLD:
             if ntfy_post(item, cls):
-                tickers = cls.get("tickers") or ["macro"]
+                tickers = cls.get("tickers") or []
+                # Tickers are now dicts (or strings in fallback). Render symbols.
+                ticker_syms = [
+                    t["symbol"] if isinstance(t, dict) else str(t)
+                    for t in tickers
+                ] or ["macro"]
+                direction = cls.get("direction", "?")
                 alerted.append(
-                    f"{item['source']}/{','.join(tickers)}({cls['impact']})"
+                    f"{item['source']}/{','.join(ticker_syms)}"
+                    f"({cls['impact']},{direction})"
                 )
 
     print(
