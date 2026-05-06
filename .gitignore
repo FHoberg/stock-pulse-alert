@@ -6,5 +6,6 @@ venv/
 .env
 .env.local
 
-# State is held in GitHub Actions cache, not committed
-state/seen.json
+# State is now committed back to the repo by the workflow for a durable
+# audit trail — dedup state, alert ledger, and scoring outcomes all live
+# under state/ in git history. Nothing under state/ should be ignored.

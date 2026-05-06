@@ -8,9 +8,13 @@ on:
   workflow_dispatch: # allows manual trigger from the Actions tab
 
 permissions:
-  contents: read
+  # contents:write so the workflow can commit the updated tracking ledger
+  # (state/seen.json, state/alerts.jsonl, state/scorecard.jsonl,
+  # state/digest_state.json) back to the repo for a durable audit trail.
+  contents: write
 
-# Prevent overlapping runs (in case a slow run is still going when next fires)
+# Prevent overlapping runs (in case a slow run is still going when next fires).
+# This also serializes commits, which avoids push races on state/.
 concurrency:
   group: monitor
   cancel-in-progress: false
@@ -23,22 +27,15 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          # Need a real ref so we can commit + push back.
+          fetch-depth: 1
+          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      # Restore the most recent state cache (seen.json).
-      # restore-keys lets us match by prefix even though we always save under a
-      # unique run-id key (caches are immutable in GitHub Actions).
-      - name: Restore state cache
-        uses: actions/cache/restore@v4
-        with:
-          path: state
-          key: stock-pulse-state-${{ github.run_id }}
-          restore-keys: |
-            stock-pulse-state-
 
       - name: Run monitor
         env:
@@ -50,10 +47,27 @@ jobs:
           ALERT_THRESHOLD: "7"
         run: python monitor.py
 
-      # Always save a fresh cache entry, even on failure, so state isn't lost.
-      - name: Save state cache
+      - name: Commit tracking ledger
         if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: state
-          key: stock-pulse-state-${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Add only the state files; ignore failures from missing files
+          # (e.g. on a clean run that produced no alerts).
+          git add state/seen.json \
+                  state/alerts.jsonl \
+                  state/scorecard.jsonl \
+                  state/digest_state.json 2>/dev/null || true
+
+          if git diff --cached --quiet; then
+            echo "No state changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Update tracking ledger [skip ci]"
+          # Pull-rebase to absorb any state changes from a concurrent or
+          # manually-triggered run, then push.
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+          git push origin "HEAD:${GITHUB_REF_NAME}"

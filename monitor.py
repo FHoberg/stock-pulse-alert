@@ -28,14 +28,22 @@ Environment variables:
 """
 from __future__ import annotations
 
+import datetime as _dt
 import json
 import os
 import re
 import sys
 import time
 import urllib.request
+import uuid
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+try:
+    from zoneinfo import ZoneInfo
+    _ZURICH = ZoneInfo("Europe/Zurich")
+except Exception:  # pragma: no cover — only triggers on missing tzdata
+    _ZURICH = None
 
 # ---------- Configuration ----------
 
@@ -552,6 +560,318 @@ def ntfy_post(item: dict, classification: dict, retries: int = 2) -> bool:
     return False
 
 
+# ---------- Performance tracking ----------
+#
+# Two append-only JSONL ledgers committed to the repo for a permanent audit
+# trail of every alert and how the underlying ticker(s) moved 24h later:
+#
+#   state/alerts.jsonl     One row per alert sent. Includes timestamp, source,
+#                          recommendation, impact, headline, explanation, and
+#                          per-ticker entry_price snapshot from Yahoo.
+#   state/scorecard.jsonl  One row per alert that has reached its 24h scoring
+#                          window. Includes per-ticker exit_price, signed pct
+#                          move, and a boolean "correct" flag.
+#   state/digest_state.json
+#                          Tracks the local Zurich date of the last digest
+#                          push so we send the 8pm summary exactly once/day.
+
+ALERTS_LOG = STATE_DIR / "alerts.jsonl"
+SCORECARD_LOG = STATE_DIR / "scorecard.jsonl"
+DIGEST_STATE_FILE = STATE_DIR / "digest_state.json"
+
+DIGEST_HOUR_LOCAL = 20         # 8pm Europe/Zurich
+SCORE_DELAY_HOURS = 24
+PRICE_TIMEOUT = 10
+
+
+def fetch_yahoo_price(symbol: str) -> float | None:
+    """Latest regular-market price for a Yahoo symbol; None on any failure."""
+    if not symbol:
+        return None
+    sym = symbol.strip().upper()
+    url = (
+        f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}"
+        "?interval=1m&range=1d"
+    )
+    try:
+        # Yahoo is picky about UAs — use a generic browser-ish one.
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (stock-pulse-alert)",
+                "Accept": "application/json",
+            },
+        )
+        with urllib.request.urlopen(req, timeout=PRICE_TIMEOUT) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        result = (data.get("chart") or {}).get("result") or []
+        if not result:
+            return None
+        meta = result[0].get("meta") or {}
+        price = meta.get("regularMarketPrice")
+        if isinstance(price, (int, float)) and price > 0:
+            return float(price)
+    except Exception as e:
+        print(f"# Yahoo price fetch failed for {symbol}: {e}", file=sys.stderr)
+    return None
+
+
+def _read_jsonl(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    rows: list[dict] = []
+    try:
+        with path.open() as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    rows.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
+    except Exception as e:
+        print(f"# Failed to read {path}: {e}", file=sys.stderr)
+    return rows
+
+
+def log_alert(item: dict, classification: dict) -> None:
+    """Append one alert row to alerts.jsonl with a Yahoo entry-price snapshot
+    for each ticker. Called only after a successful ntfy push."""
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    enriched: list[dict] = []
+    for t in classification.get("tickers") or []:
+        if isinstance(t, dict):
+            sym = (t.get("symbol") or "").strip()
+        else:
+            sym = str(t).strip()
+        if not sym:
+            continue
+        entry: dict = {"symbol": sym}
+        if isinstance(t, dict):
+            if t.get("name"):
+                entry["name"] = t["name"]
+            if t.get("isin"):
+                entry["isin"] = t["isin"]
+        price = fetch_yahoo_price(sym)
+        if price is not None:
+            entry["entry_price"] = price
+        enriched.append(entry)
+
+    row = {
+        "id": uuid.uuid4().hex[:12],
+        "ts": _dt.datetime.now(_dt.timezone.utc).isoformat(),
+        "source": item.get("source", ""),
+        "headline": item.get("title", ""),
+        "link": item.get("link", ""),
+        "explanation": classification.get("explanation", ""),
+        "impact": int(classification.get("impact", 0)),
+        "recommendation": classification.get("recommendation", "skip"),
+        "is_macro": bool(classification.get("is_macro", False)),
+        "tickers": enriched,
+    }
+    with ALERTS_LOG.open("a") as f:
+        f.write(json.dumps(row) + "\n")
+
+
+def score_pending_alerts() -> int:
+    """For any alert whose ts is ≥SCORE_DELAY_HOURS old and which doesn't yet
+    have a scorecard row, fetch current prices and append a scorecard row.
+    Returns the number of newly-scored alerts."""
+    alerts = _read_jsonl(ALERTS_LOG)
+    if not alerts:
+        return 0
+    scored = _read_jsonl(SCORECARD_LOG)
+    scored_ids = {s.get("alert_id") for s in scored if s.get("alert_id")}
+    now_utc = _dt.datetime.now(_dt.timezone.utc)
+    cutoff_secs = SCORE_DELAY_HOURS * 3600
+    written = 0
+
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    with SCORECARD_LOG.open("a") as f:
+        for a in alerts:
+            aid = a.get("id")
+            if not aid or aid in scored_ids:
+                continue
+            try:
+                ts = _dt.datetime.fromisoformat(
+                    str(a.get("ts", "")).replace("Z", "+00:00")
+                )
+            except Exception:
+                continue
+            if (now_utc - ts).total_seconds() < cutoff_secs:
+                continue
+            rec = a.get("recommendation")
+            if rec not in ("buy", "sell"):
+                continue
+
+            ticker_results: list[dict] = []
+            for t in a.get("tickers") or []:
+                sym = t.get("symbol")
+                entry = t.get("entry_price")
+                if not sym:
+                    continue
+                exit_price = fetch_yahoo_price(sym) if sym else None
+                pct: float | None = None
+                correct: bool | None = None
+                if exit_price is not None and entry is not None and entry > 0:
+                    pct = (exit_price - entry) / entry * 100
+                    correct = (rec == "buy" and pct > 0) \
+                        or (rec == "sell" and pct < 0)
+                ticker_results.append({
+                    "symbol": sym,
+                    "entry_price": entry,
+                    "exit_price": exit_price,
+                    "pct": round(pct, 3) if pct is not None else None,
+                    "correct": correct,
+                })
+
+            row = {
+                "alert_id": aid,
+                "ts": a.get("ts"),
+                "scored_at": now_utc.isoformat(),
+                "source": a.get("source"),
+                "headline": a.get("headline"),
+                "recommendation": rec,
+                "impact": a.get("impact"),
+                "is_macro": a.get("is_macro", False),
+                "tickers": ticker_results,
+            }
+            f.write(json.dumps(row) + "\n")
+            scored_ids.add(aid)
+            written += 1
+    return written
+
+
+def _now_zurich() -> _dt.datetime:
+    if _ZURICH is not None:
+        return _dt.datetime.now(_ZURICH)
+    return _dt.datetime.now(_dt.timezone.utc)
+
+
+def maybe_send_daily_digest() -> bool:
+    """If the local Zurich time is in the configured digest hour and we
+    haven't already sent today's digest, push a one-line ntfy notification
+    summarizing the last 24h of scorecard activity. Returns True iff a
+    digest message was sent."""
+    if not NTFY_TOPIC:
+        return False
+    now_zurich = _now_zurich()
+    if now_zurich.hour != DIGEST_HOUR_LOCAL:
+        return False
+    today_str = now_zurich.date().isoformat()
+
+    state: dict = {}
+    if DIGEST_STATE_FILE.exists():
+        try:
+            state = json.loads(DIGEST_STATE_FILE.read_text())
+        except Exception:
+            state = {}
+    if state.get("last_sent_date") == today_str:
+        return False
+
+    scored = _read_jsonl(SCORECARD_LOG)
+    cutoff = _dt.datetime.now(_dt.timezone.utc) - _dt.timedelta(hours=24)
+    recent: list[dict] = []
+    for s in scored:
+        try:
+            scored_at = _dt.datetime.fromisoformat(
+                str(s.get("scored_at", "")).replace("Z", "+00:00")
+            )
+        except Exception:
+            continue
+        if scored_at >= cutoff:
+            recent.append(s)
+
+    # Always mark today as sent (even if there's nothing) so we don't
+    # re-evaluate on every cron tick within the 8pm hour.
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+
+    if not recent:
+        DIGEST_STATE_FILE.write_text(
+            json.dumps({"last_sent_date": today_str})
+        )
+        return False
+
+    correct_n = 0
+    incorrect_n = 0
+    no_data_n = 0
+    moves: list[float] = []
+    pnl_moves: list[float] = []  # signed by recommendation
+    detail_lines: list[str] = []
+
+    for r in recent:
+        rec = (r.get("recommendation") or "?").upper()
+        src = r.get("source") or "?"
+        for t in r.get("tickers") or []:
+            sym = t.get("symbol", "?")
+            pct = t.get("pct")
+            corr = t.get("correct")
+            if corr is True:
+                correct_n += 1
+                marker = "✓"
+            elif corr is False:
+                incorrect_n += 1
+                marker = "✗"
+            else:
+                no_data_n += 1
+                marker = "·"
+            if isinstance(pct, (int, float)):
+                moves.append(float(pct))
+                pnl_moves.append(
+                    float(pct) if rec == "BUY" else -float(pct)
+                )
+                detail_lines.append(
+                    f"  {marker} [{src}] {rec} {sym}: {pct:+.2f}%"
+                )
+            else:
+                detail_lines.append(
+                    f"  {marker} [{src}] {rec} {sym}: no price data"
+                )
+
+    decided = correct_n + incorrect_n
+    hit_rate = (correct_n / decided * 100) if decided > 0 else 0.0
+    avg_move = (sum(moves) / len(moves)) if moves else 0.0
+    avg_pnl = (sum(pnl_moves) / len(pnl_moves)) if pnl_moves else 0.0
+
+    title = (
+        f"Daily Scorecard {today_str}: {correct_n}/{decided} hits "
+        f"({hit_rate:.0f}%)"
+    )
+    body_lines = [
+        f"Last 24h: {len(recent)} alerts, "
+        f"{correct_n + incorrect_n + no_data_n} ticker outcomes.",
+        f"Hits: {correct_n}  Misses: {incorrect_n}  No-data: {no_data_n}",
+        f"Avg 24h move: {avg_move:+.2f}%   "
+        f"Avg return per call: {avg_pnl:+.2f}%",
+        "",
+        "Detail:",
+        *detail_lines,
+    ]
+    body = "\n".join(body_lines).encode("utf-8")
+    headers = {
+        "Title": title.encode("utf-8"),
+        "Priority": "default",  # informational, not a market alert
+        "Tags": "bar_chart",
+    }
+    url = f"https://ntfy.sh/{NTFY_TOPIC}"
+    sent = False
+    try:
+        req = urllib.request.Request(
+            url, data=body, headers=headers, method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=15) as r:
+            sent = 200 <= r.status < 300
+    except Exception as e:
+        print(f"# Digest push failed: {e}", file=sys.stderr)
+
+    if sent:
+        DIGEST_STATE_FILE.write_text(
+            json.dumps({"last_sent_date": today_str})
+        )
+    return sent
+
+
 # ---------- Main ----------
 
 def main() -> int:
@@ -606,6 +926,11 @@ def main() -> int:
             suppressed_skip += 1
             continue
         if ntfy_post(item, cls):
+            # Persist the alert + entry-price snapshot to the durable ledger.
+            try:
+                log_alert(item, cls)
+            except Exception as e:
+                print(f"# log_alert failed: {e}", file=sys.stderr)
             tickers = cls.get("tickers") or []
             ticker_syms = [
                 t["symbol"] if isinstance(t, dict) else str(t)
@@ -617,10 +942,28 @@ def main() -> int:
                 f"({cls['impact']},{rec})"
             )
 
+    # Score any alerts that have aged past the 24h window since their
+    # entry-price snapshot. Idempotent — already-scored alerts are skipped.
+    try:
+        newly_scored = score_pending_alerts()
+    except Exception as e:
+        print(f"# score_pending_alerts failed: {e}", file=sys.stderr)
+        newly_scored = 0
+
+    # Push the daily digest if we're inside the 8pm Zurich hour and haven't
+    # sent yet today.
+    try:
+        digest_sent = maybe_send_daily_digest()
+    except Exception as e:
+        print(f"# maybe_send_daily_digest failed: {e}", file=sys.stderr)
+        digest_sent = False
+
     print(
         f"Fetched {len(all_items)} items, {len(new_items)} new, "
         f"{len(alerted)} alerted, {suppressed_skip} suppressed (no clear "
-        f"buy/sell) [{', '.join(alerted) if alerted else '-'}]. "
+        f"buy/sell), {newly_scored} newly scored, "
+        f"digest_sent={digest_sent} "
+        f"[{', '.join(alerted) if alerted else '-'}]. "
         f"Errors: {errors if errors else 'none'}"
     )
     return 0
