@@ -197,8 +197,8 @@ def keyword_classify(item: dict) -> dict:
     source = item["source"]
 
     impact = 1
-    reason = "Routine."
-    direction = "unclear"
+    explanation = "Routine."
+    recommendation = "skip"
     tickers: list[dict] = []
     is_macro = False
 
@@ -213,29 +213,46 @@ def keyword_classify(item: dict) -> dict:
         impact = best_score
         m = re.search(r"8-K\s*-\s*([^\(]+)", item["title"])
         company = (m.group(1).strip().rstrip(",.") if m else "")
-        reason = f"{best_label}{(' for ' + company) if company else ''}."
-        # Coarse direction guess from item code semantics
+        explanation = (
+            f"{(company + ' filed a ') if company else 'A company filed a '}"
+            f"{best_label} disclosure with the SEC. "
+            "8-K item codes of this type usually indicate material news that "
+            "moves the stock."
+        )
+        # Only emit a recommendation when the item code points clearly one way.
         if any(c in codes for c in ("1.03", "2.04", "2.06", "3.01", "4.02")):
-            direction = "down"
+            recommendation = "sell"
         elif "2.01" in codes:
-            direction = "up"
+            recommendation = "buy"
+        # Otherwise leave as "skip" — keyword rules can't tell from the code alone.
 
     elif source == "Trump":
         if not text.strip():
-            reason = "Empty post."
+            explanation = "Empty post."
         else:
             for score, kws in TRUMP_KEYWORDS.items():
                 hit = next((kw for kw in kws if kw in text), None)
                 if hit and score > impact:
                     impact = score
-                    reason = f"Mentions '{hit}'."
                     is_macro = True
                     if hit in ("tariff", "tariffs", "sanction", "sanctions",
                               "embargo", "rate hike", "shutdown", "default",
                               "recession"):
-                        direction = "down"
+                        recommendation = "sell"
+                        explanation = (
+                            f"Trump post mentions '{hit}'. Historically these "
+                            "announcements pressure US equities and the named "
+                            "sector lower in the following session."
+                        )
                     elif hit in ("trade deal", "rate cut"):
-                        direction = "up"
+                        recommendation = "buy"
+                        explanation = (
+                            f"Trump post mentions '{hit}'. Such announcements "
+                            "typically lift broad US equities and risk assets "
+                            "in the following session."
+                        )
+                    else:
+                        explanation = f"Trump post mentions '{hit}'."
 
     elif source == "Fed":
         is_macro = True
@@ -243,12 +260,16 @@ def keyword_classify(item: dict) -> dict:
             hit = next((kw for kw in kws if kw in text), None)
             if hit and score > impact:
                 impact = score
-                reason = f"Fed press mentioning '{hit}'."
+                explanation = (
+                    f"Fed release mentioning '{hit}'. Direction is not "
+                    "determinable from the headline alone."
+                )
+                # Direction depends on hawkish vs dovish content — leave as skip.
 
     return {
         "impact": impact,
-        "direction": direction,
-        "summary": reason,
+        "recommendation": recommendation,
+        "explanation": explanation,
         "tickers": tickers,
         "is_macro": is_macro,
     }
@@ -259,8 +280,9 @@ def llm_classify(items: list[dict], api_key: str) -> list[dict]:
     import http.client
 
     system = (
-        "You are a financial news triage system. For each news item, produce "
-        "a structured impact assessment a retail investor can act on.\n\n"
+        "You are a financial news triage system for a retail investor who "
+        "wants ONLY actionable BUY or SELL signals. Anything ambiguous must "
+        "be marked 'skip' so it's never shown to the user.\n\n"
         "IMPACT CALIBRATION (1-10):\n"
         "  1-3: routine (compensation amendments, regular dividends, personal "
         "posts, empty content)\n"
@@ -280,11 +302,23 @@ def llm_classify(items: list[dict], api_key: str) -> list[dict]:
         "Stress tests, big bank rules -> 6-7. Routine speeches -> 2-4.\n\n"
         "OUTPUT SCHEMA per item (one JSON object, in input order):\n"
         '  "impact": int 1-10\n'
-        '  "direction": "up" | "down" | "mixed" | "unclear"\n'
-        '  "summary": ONE plain-English sentence (15-35 words) explaining '
-        "what happened and WHY it would push the stock(s) up or down. Be "
-        "concrete (mention magnitudes, sectors, mechanism if relevant). "
-        "Avoid jargon.\n"
+        '  "recommendation": "buy" | "sell" | "skip"\n'
+        "      - 'buy' = the news will push the named/affected instrument(s) "
+        "UP. The user should consider opening a long position.\n"
+        "      - 'sell' = the news will push the named/affected instrument(s) "
+        "DOWN. The user should consider opening a short / closing a long.\n"
+        "      - 'skip' = direction is genuinely uncertain, mixed across "
+        "tickers, or the news is too low-impact to act on. Use 'skip' "
+        "liberally — better silent than wrong. If you cannot decisively pick "
+        "one of {buy, sell}, pick 'skip'.\n"
+        '  "explanation": 2-3 plain-English sentences (40-70 words total). '
+        "Sentence 1: what concretely happened (who, what, magnitude/scope). "
+        "Sentence 2: WHY this pushes the stock or sector in the chosen "
+        "direction (mechanism: revenue hit, margin pressure, demand boost, "
+        "rate sensitivity, etc.). Sentence 3 (optional): the practical "
+        "implication for the listed tickers. Avoid jargon. Write so a "
+        "non-finance reader understands instantly. If recommendation is "
+        "'skip', explain briefly why direction is unclear.\n"
         '  "tickers": list of up to 4 objects {"symbol": str, "name": str, '
         '"isin": str (OPTIONAL — include ONLY if you are certain; never '
         "guess an ISIN; omit the field entirely when unsure)}.\n"
@@ -365,16 +399,30 @@ def llm_classify(items: list[dict], api_key: str) -> list[dict]:
             elif isinstance(t, str) and t.strip():
                 tickers.append({"symbol": t.strip()})
 
-        direction = str(cls.get("direction", "unclear")).lower().strip()
-        if direction not in ("up", "down", "mixed", "unclear"):
-            direction = "unclear"
+        # Recommendation: only "buy" / "sell" trigger an alert; everything
+        # else (including legacy "up"/"down"/"mixed"/"unclear") is normalized
+        # so we can still send if the model used the old vocabulary.
+        rec = str(cls.get("recommendation") or "").lower().strip()
+        if not rec:
+            # Backward-compat: tolerate old "direction" key
+            legacy = str(cls.get("direction") or "").lower().strip()
+            rec = {"up": "buy", "down": "sell"}.get(legacy, "skip")
+        if rec == "up":
+            rec = "buy"
+        elif rec == "down":
+            rec = "sell"
+        if rec not in ("buy", "sell"):
+            rec = "skip"
 
-        summary = str(cls.get("summary") or cls.get("reason") or "")[:400]
+        explanation = str(
+            cls.get("explanation") or cls.get("summary")
+            or cls.get("reason") or ""
+        )[:600]
 
         out.append({
             "impact": int(cls.get("impact", 1)),
-            "direction": direction,
-            "summary": summary,
+            "recommendation": rec,
+            "explanation": explanation,
             "tickers": tickers,
             "is_macro": bool(cls.get("is_macro", False)),
         })
@@ -396,18 +444,14 @@ def classify(items: list[dict]) -> list[dict]:
 
 # ---------- Notification ----------
 
-DIRECTION_GLYPH = {
-    "up": "UP",
-    "down": "DOWN",
-    "mixed": "MIXED",
-    "unclear": "?",
+RECOMMENDATION_GLYPH = {
+    "buy": "BUY",
+    "sell": "SELL",
 }
 
-DIRECTION_TAG = {
-    "up": "chart_with_upwards_trend",
-    "down": "chart_with_downwards_trend",
-    "mixed": "left_right_arrow",
-    "unclear": "grey_question",
+RECOMMENDATION_TAG = {
+    "buy": "chart_with_upwards_trend",
+    "sell": "chart_with_downwards_trend",
 }
 
 
@@ -429,14 +473,19 @@ def ntfy_post(item: dict, classification: dict, retries: int = 2) -> bool:
         return False
 
     impact = classification["impact"]
-    direction = classification.get("direction", "unclear")
+    recommendation = classification.get("recommendation", "skip")
     tickers = classification.get("tickers") or []
-    summary = (classification.get("summary")
-               or classification.get("reason") or "").strip()
+    explanation = (classification.get("explanation")
+                   or classification.get("summary")
+                   or classification.get("reason") or "").strip()
     is_macro = classification.get("is_macro", False)
 
+    # Caller is responsible for filtering "skip"; defensive guard here too.
+    if recommendation not in ("buy", "sell"):
+        return False
+
     # Title: short, scannable. Format example:
-    #   [Trump] DOWN i8 - SOXX, NVDA
+    #   BUY [Trump] i8 - SOXX, NVDA
     if tickers:
         ticker_label = ", ".join(
             (t.get("symbol", "?") if isinstance(t, dict) else str(t))
@@ -445,14 +494,20 @@ def ntfy_post(item: dict, classification: dict, retries: int = 2) -> bool:
     else:
         ticker_label = "macro"
     title = (
-        f"[{item['source']}] {DIRECTION_GLYPH.get(direction, '?')} "
+        f"{RECOMMENDATION_GLYPH[recommendation]} [{item['source']}] "
         f"i{impact} - {ticker_label}"
     )
 
-    # Body: headline, plain-English summary, ticker list, link.
-    body_lines: list[str] = [item["title"]]
-    if summary:
-        body_lines += ["", summary]
+    # Body: recommendation banner, headline, plain-English explanation,
+    # ticker list, link.
+    verb = "Consider BUYING" if recommendation == "buy" else "Consider SELLING"
+    body_lines: list[str] = [
+        f"{verb}: {ticker_label}",
+        "",
+        item["title"],
+    ]
+    if explanation:
+        body_lines += ["", explanation]
     if tickers:
         heading = "Likely affected (bellwether examples):" if is_macro \
                   else "Affected:"
@@ -469,7 +524,7 @@ def ntfy_post(item: dict, classification: dict, retries: int = 2) -> bool:
     headers = {
         "Title": title.encode("utf-8"),
         "Priority": "high",
-        "Tags": DIRECTION_TAG.get(direction, "chart_with_upwards_trend"),
+        "Tags": RECOMMENDATION_TAG[recommendation],
     }
     if item.get("link"):
         headers["Click"] = item["link"]
@@ -542,24 +597,30 @@ def main() -> int:
     classifications = classify(new_items)
 
     alerted: list[str] = []
+    suppressed_skip = 0
     for item, cls in zip(new_items, classifications):
-        if cls["impact"] >= ALERT_THRESHOLD:
-            if ntfy_post(item, cls):
-                tickers = cls.get("tickers") or []
-                # Tickers are now dicts (or strings in fallback). Render symbols.
-                ticker_syms = [
-                    t["symbol"] if isinstance(t, dict) else str(t)
-                    for t in tickers
-                ] or ["macro"]
-                direction = cls.get("direction", "?")
-                alerted.append(
-                    f"{item['source']}/{','.join(ticker_syms)}"
-                    f"({cls['impact']},{direction})"
-                )
+        if cls["impact"] < ALERT_THRESHOLD:
+            continue
+        # User policy: ONLY notify on a clear buy or sell. Skip everything else.
+        if cls.get("recommendation") not in ("buy", "sell"):
+            suppressed_skip += 1
+            continue
+        if ntfy_post(item, cls):
+            tickers = cls.get("tickers") or []
+            ticker_syms = [
+                t["symbol"] if isinstance(t, dict) else str(t)
+                for t in tickers
+            ] or ["macro"]
+            rec = cls.get("recommendation", "?")
+            alerted.append(
+                f"{item['source']}/{','.join(ticker_syms)}"
+                f"({cls['impact']},{rec})"
+            )
 
     print(
         f"Fetched {len(all_items)} items, {len(new_items)} new, "
-        f"{len(alerted)} alerted [{', '.join(alerted) if alerted else '-'}]. "
+        f"{len(alerted)} alerted, {suppressed_skip} suppressed (no clear "
+        f"buy/sell) [{', '.join(alerted) if alerted else '-'}]. "
         f"Errors: {errors if errors else 'none'}"
     )
     return 0
