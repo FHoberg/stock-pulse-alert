@@ -54,12 +54,23 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Add only the state files; ignore failures from missing files
-          # (e.g. on a clean run that produced no alerts).
-          git add state/seen.json \
-                  state/alerts.jsonl \
-                  state/scorecard.jsonl \
-                  state/digest_state.json 2>/dev/null || true
+          # Stage only the state files that actually exist this run.
+          # The previous version used a single multi-path
+          # `git add ... 2>/dev/null || true`, but when any pathspec was
+          # missing git left NOTHING staged — so seen.json never got
+          # committed and every run looked like a "first run". The
+          # per-file check below is unambiguous and logs what was staged.
+          for f in state/seen.json \
+                   state/alerts.jsonl \
+                   state/scorecard.jsonl \
+                   state/digest_state.json; do
+            if [ -f "$f" ]; then
+              echo "Staging $f"
+              git add "$f"
+            else
+              echo "Skipping $f (does not exist this run)"
+            fi
+          done
 
           if git diff --cached --quiet; then
             echo "No state changes to commit."
