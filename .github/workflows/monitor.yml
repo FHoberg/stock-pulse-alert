@@ -44,7 +44,9 @@ jobs:
           # SEC EDGAR requires a User-Agent with real contact info (email).
           # Set this secret to e.g. "Your Name your-email@example.com".
           USER_AGENT: ${{ secrets.USER_AGENT }}
-          ALERT_THRESHOLD: "7"
+          # Temporarily lowered from 7 -> 5 to verify the end-to-end pipeline
+          # with actual ntfy notifications. Dial back up once verified.
+          ALERT_THRESHOLD: "5"
         run: python monitor.py
 
       - name: Commit tracking ledger
