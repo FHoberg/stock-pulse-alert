@@ -207,6 +207,10 @@
     "Trump::https://trumpstruth.org/statuses/38278",
     "Trump::https://trumpstruth.org/statuses/38275",
     "Trump::https://trumpstruth.org/statuses/38276",
-    "Trump::https://trumpstruth.org/statuses/38277"
+    "Trump::https://trumpstruth.org/statuses/38277",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000310764-26-000029",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-057731",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001683168-26-003594",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-213953"
   ]
 }
