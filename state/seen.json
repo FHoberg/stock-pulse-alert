@@ -2621,6 +2621,10 @@
     "NIST::https://www.nist.gov/node/1886491",
     "NIST::https://www.nist.gov/node/1886651",
     "NIST::https://www.nist.gov/node/1886136",
-    "SEC 13::urn:tag:sec.gov,2008:accession-number=0001140361-26-022562"
+    "SEC 13::urn:tag:sec.gov,2008:accession-number=0001140361-26-022562",
+    "Trump::https://trumpstruth.org/statuses/38773",
+    "Trump::https://trumpstruth.org/statuses/38774",
+    "Trump::https://trumpstruth.org/statuses/38775",
+    "Trump::https://trumpstruth.org/statuses/38776"
   ]
 }
