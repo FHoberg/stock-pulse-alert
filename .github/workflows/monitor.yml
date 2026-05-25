@@ -44,9 +44,12 @@ jobs:
           # SEC EDGAR requires a User-Agent with real contact info (email).
           # Set this secret to e.g. "Your Name your-email@example.com".
           USER_AGENT: ${{ secrets.USER_AGENT }}
-          # Temporarily lowered from 7 -> 5 to verify the end-to-end pipeline
-          # with actual ntfy notifications. Dial back up once verified.
-          ALERT_THRESHOLD: "5"
+          # Minimum LLM impact score (1-10) for an alert to fire. Combined
+          # with the buy/sell-only gate, this is the relevance filter.
+          # 7 = "meaningful, 1-3% move likely"; 8 = "significant, 3-7% move
+          # or sector-wide effect". Raised to 8 after pipeline verification
+          # to keep the notification volume tight.
+          ALERT_THRESHOLD: "8"
         run: python monitor.py
 
       - name: Commit tracking ledger
