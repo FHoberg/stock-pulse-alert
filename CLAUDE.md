@@ -8,9 +8,16 @@ sections beneath give a deeper map of the codebase.
 
 ## Briefing paragraph (paste this into a new chat)
 
-This is a personal stock alert system. A GitHub Actions cron polls three
-feeds — SEC EDGAR 8-K filings, Federal Reserve press releases, and Trump
-posts via trumpstruth.org — every 10 minutes. New items are classified by
+This is a personal stock alert system. The repo is
+`https://github.com/FHoberg/stock-pulse-alert` and lives locally at
+`~/Documents/GitHub/stock-pulse-alert` on my main computer. A GitHub
+Actions cron polls five feeds — SEC EDGAR 8-K filings, Federal Reserve
+press releases, Trump posts via trumpstruth.org, NIST news (for
+Commerce / CHIPS-Act / federal-grant announcements that bypass the 8-K
+channel, e.g. the May 2026 $2B quantum LOI batch), and SEC EDGAR
+Schedule 13D/13G filings (for activist stakes and smart-money 5%
+crossings, e.g. BlackRock's 13G in Rubrik) — every 10 minutes. New
+items are classified by
 Claude Haiku 4.5 (`claude-haiku-4-5-20251001`) and pushed to my phone via
 ntfy.sh, but ONLY when the call is a clear BUY or SELL; anything ambiguous
 is suppressed by design. Each fired alert is logged with a Yahoo Finance
@@ -45,6 +52,22 @@ been firing, and run `git log --oneline -20` for recent direction.
   date the daily digest was sent, so it fires exactly once per local day.
 - **`README.md`** — original setup instructions (ntfy topic, GitHub
   secrets). Slightly stale on tracking — the source of truth is this file.
+
+## Feed-specific notes
+
+- **NIST** (`https://www.nist.gov/news-events/news/rss.xml`) — the LLM is
+  tuned to fire on CHIPS-Act letters of intent, federal grants, equity
+  stakes, and DOE loan guarantees naming publicly-traded recipients (BUY
+  the named tickers or the sector bellwether ETF). Routine standards /
+  research / regulatory news → SKIP.
+- **SEC 13** (`...action=getcurrent&type=SC+13&output=atom`) — noisiest
+  feed by far. The LLM is told to SKIP routine 13G repositioning by
+  Vanguard / BlackRock-as-index / State Street / FMR in mega-caps, and
+  only fire on (a) any 13D / 13D/A (activist stake → BUY), (b) any 13G
+  whose filer is on the smart-money whitelist in `monitor.py`'s
+  `SMART_MONEY_FILERS` constant, or (c) first-time 5%+ crossings by big
+  index houses in smaller-cap names (which is what caught BlackRock →
+  Rubrik). The keyword fallback applies the same logic.
 
 ## Required GitHub Actions secrets
 

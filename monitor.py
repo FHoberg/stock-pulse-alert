@@ -10,6 +10,10 @@ Sources:
   - SEC EDGAR current 8-K filings (Atom)
   - Federal Reserve press releases (RSS)
   - Trump posts via trumpstruth.org (RSS)
+  - NIST news (RSS) — for Commerce / CHIPS-Act / federal-grant announcements
+    that don't move through 8-Ks. Caught the May-2026 $2B quantum LOI batch.
+  - SEC EDGAR Schedule 13D / 13G filings (Atom) — for institutional and
+    activist position disclosures. Caught e.g. BlackRock 13G in Rubrik.
 
 Classification:
   - If ANTHROPIC_API_KEY is set, uses Claude Haiku 4.5 via the Anthropic API
@@ -75,6 +79,18 @@ SOURCES: list[tuple[str, str]] = [
      "https://www.federalreserve.gov/feeds/press_all.xml"),
     ("Trump",
      "https://trumpstruth.org/feed"),
+    # NIST press feed — catches Commerce Dept / CHIPS-Act / federal-grant
+    # announcements (e.g. equity stakes in publicly-traded quantum, semi,
+    # nuclear, rare-earth, biotech recipients) that bypass the 8-K channel.
+    ("NIST",
+     "https://www.nist.gov/news-events/news/rss.xml"),
+    # SEC EDGAR Schedule 13D/13G "latest filings" — beneficial ownership
+    # disclosures. Noisier than 8-K; the LLM step is tuned to skip routine
+    # index-mechanics and only fire on activist (13D) filings or 13Gs from
+    # recognized active managers.
+    ("SEC 13",
+     "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=SC+13"
+     "&company=&dateb=&owner=include&count=40&output=atom"),
 ]
 
 
@@ -145,6 +161,60 @@ def parse_feed(xml_bytes: bytes, source: str) -> list[dict]:
     return items
 
 
+# ---------- SEC 13 enrichment ----------
+#
+# The EDGAR "getcurrent" atom feed only carries the SUBJECT company in the
+# entry title (e.g. "SC 13G - RUBRIK, INC."). The FILER (BlackRock, Pershing
+# Square, Vanguard, etc.) is what tells us whether the filing is actionable,
+# but the filer's name only appears inside the linked filing index page.
+# This function fetches that page once per SC 13 item and prepends a
+# "Filed by: <filer>" line to the item's summary so the LLM (and the keyword
+# fallback) can apply the smart-money whitelist.
+
+_FILED_BY_RE = re.compile(
+    r'class="companyName">\s*([^<\n]+?)\s*\(Filed by\)',
+    re.IGNORECASE,
+)
+
+
+def enrich_sec_13(item: dict) -> dict:
+    """Fetch the linked SEC index page and prepend the filer name(s) to the
+    item's summary. No-op for non-SEC-13 items or on any failure.
+
+    Mutates and returns the item."""
+    if item.get("source") != "SEC 13":
+        return item
+    link = item.get("link") or ""
+    if "/Archives/edgar/data/" not in link:
+        return item
+    try:
+        html = fetch(link, timeout=15).decode("utf-8", errors="replace")
+    except Exception as e:
+        print(
+            f"# enrich_sec_13: fetch failed for {link}: {e}",
+            file=sys.stderr,
+        )
+        return item
+
+    filers = _FILED_BY_RE.findall(html)
+    # Dedup case-insensitively while preserving order.
+    seen: set[str] = set()
+    unique_filers: list[str] = []
+    for f in filers:
+        key = f.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        unique_filers.append(f)
+
+    if not unique_filers:
+        return item
+
+    prefix = "Filed by: " + "; ".join(unique_filers) + ". "
+    item["summary"] = (prefix + (item.get("summary") or ""))[:600]
+    return item
+
+
 # ---------- State ----------
 
 def load_state() -> dict:
@@ -196,6 +266,47 @@ FED_KEYWORDS: dict[int, list[str]] = {
     8: ["monetary policy", "interest rate", "stress test"],
     7: ["regulatory", "supervision"],
 }
+
+# Smart-money filers — when one of these names appears in a SC 13 filing
+# headline or summary, treat the filing as actionable regardless of form type.
+# These are recognizable active managers / activist funds whose disclosed
+# positions historically attract follow-on flows.
+SMART_MONEY_FILERS: list[str] = [
+    "berkshire hathaway", "berkshire", "warren buffett",
+    "pershing square", "ackman",
+    "scion asset", "michael burry",
+    "soros fund", "soros management",
+    "third point", "daniel loeb",
+    "icahn", "carl icahn",
+    "elliott management", "elliott investment",
+    "trian", "nelson peltz",
+    "starboard value",
+    "valueact",
+    "greenlight capital", "einhorn",
+    "tiger global",
+    "coatue",
+    "lone pine",
+    "viking global",
+    "renaissance technologies",
+    "citadel", "ken griffin",
+    "d.e. shaw", "d. e. shaw",
+    "two sigma",
+    "bridgewater",
+]
+
+# Bullish NIST/Commerce keywords — federal money flowing toward named
+# private-sector recipients. The keyword fallback can't reliably extract
+# tickers, but it can at least tag the item as likely-bullish.
+NIST_BULLISH_KEYWORDS: list[str] = [
+    "chips act", "letters of intent", "letter of intent",
+    "equity stake", "equity stakes",
+    "billion in", "billion to", "billion for",
+    "federal grant", "federal grants",
+    "loan guarantee", "doe loan",
+    "award to", "awarded to", "selected for",
+    "quantum computing", "semiconductor manufacturing",
+    "rare earth", "advanced packaging",
+]
 
 
 def keyword_classify(item: dict) -> dict:
@@ -274,6 +385,63 @@ def keyword_classify(item: dict) -> dict:
                 )
                 # Direction depends on hawkish vs dovish content — leave as skip.
 
+    elif source == "NIST":
+        # Default to low impact. Only escalate if the headline names a federal
+        # funding/equity action that historically benefits named recipients.
+        impact = 3
+        explanation = "Federal agency release; no obvious market signal."
+        is_macro = True
+        for hit in NIST_BULLISH_KEYWORDS:
+            if hit in text:
+                impact = 7
+                recommendation = "buy"
+                is_macro = True  # no ticker extraction in fallback
+                explanation = (
+                    f"NIST/Commerce release mentions '{hit}'. Federal "
+                    "money flowing toward named publicly-traded recipients "
+                    "typically lifts the sector's bellwether ETF (SOXX for "
+                    "semis, ICLN clean energy, URA uranium, REMX rare "
+                    "earths) and the named companies on the day."
+                )
+                break
+
+    elif source == "SEC 13":
+        # Default to skip — this feed is noisy. Two trigger conditions:
+        #   (a) form is 13D/13D/A → activist stake → BUY
+        #   (b) filer is a smart-money name → BUY
+        # Otherwise (routine index-fund mechanics) → skip.
+        is_13d = bool(re.search(r"sc\s*13d|schedule\s*13d|13d/a", text))
+        smart_hit = next(
+            (f for f in SMART_MONEY_FILERS if f in text), None
+        )
+        if is_13d:
+            impact = 8
+            recommendation = "buy"
+            explanation = (
+                "Schedule 13D filing — an activist investor disclosed a "
+                "5%+ stake with stated intent to influence the issuer. "
+                "Historically these filings precede a value-unlocking "
+                "catalyst (board changes, strategic review, spin-off, or "
+                "sale) and attract follow-on buying within days."
+            )
+        elif smart_hit:
+            impact = 7
+            recommendation = "buy"
+            explanation = (
+                f"Schedule 13G filing by {smart_hit.title()} — a "
+                "recognized active manager. Concentrated stakes from "
+                "track-record investors signal fundamental conviction "
+                "and tend to attract follow-on flows from other funds "
+                "in the days after the disclosure."
+            )
+        else:
+            impact = 2
+            explanation = (
+                "Routine 13G passive-ownership disclosure; most likely "
+                "an index-fund mechanics adjustment with no directional "
+                "signal."
+            )
+
     return {
         "impact": impact,
         "recommendation": recommendation,
@@ -308,6 +476,47 @@ def llm_classify(items: list[dict], api_key: str) -> list[dict]:
         "political content unrelated to economy -> 1-3. Empty -> 1.\n\n"
         "Fed: rate decisions, FOMC statements, emergency actions -> 8+. "
         "Stress tests, big bank rules -> 6-7. Routine speeches -> 2-4.\n\n"
+        "NIST / Commerce / federal-agency releases — calibrate by program "
+        "scope:\n"
+        "  - CHIPS-Act letters of intent, equity stakes, federal grants, DOE "
+        "loan guarantees, or major procurement awards naming publicly-traded "
+        "recipients -> 8-9, recommendation BUY for named recipients. The "
+        "stock typically rallies on validation + new revenue.\n"
+        "  - Sector-wide CHIPS / clean-energy / nuclear / rare-earth funding "
+        "announcements without named companies -> 7-8, BUY on the sector "
+        "ETF bellwether (SOXX semis, ICLN clean energy, URA uranium, REMX "
+        "rare earths).\n"
+        "  - Quantum-specific federal money -> name the listed pure-plays "
+        "(IONQ, RGTI, QBTS, QUBT, ARQQ) plus IBM if mentioned.\n"
+        "  - Routine standards/research/regulatory news -> 1-4, SKIP.\n\n"
+        "SEC SC 13 (Schedule 13D / 13G) — this is the noisiest feed, default "
+        "to SKIP aggressively. Only fire when one of these is true:\n"
+        "  - Form is SC 13D or 13D/A (an ACTIVIST stake, i.e. filer intends "
+        "to influence the issuer) -> impact 8, BUY. 13Ds historically "
+        "precede a catalyst (board push, strategic review, spin-off, sale).\n"
+        "  - Form is SC 13G/13G/A AND the filer is on the smart-money "
+        "whitelist below -> impact 7-8, BUY. Concentrated stakes from "
+        "track-record investors are followed by other money.\n"
+        "  - Form is SC 13G/13G/A AND the subject company is a recent IPO "
+        "or sub-$20B mid/small-cap AND filer is BlackRock / Vanguard / "
+        "State Street first-time crossing 5% -> impact 7, BUY (this caught "
+        "BlackRock's 5.3% in Rubrik). Their concentrated bets in "
+        "smaller-cap names are meaningful; their mega-cap repositioning "
+        "is not.\n"
+        "  - Otherwise (Vanguard/BlackRock/State Street/FMR/Fidelity in "
+        "mega-caps, micro position changes, generic index-mechanics) -> "
+        "SKIP. Use SKIP liberally here.\n"
+        "  - SMART-MONEY WHITELIST (always fire if you see the filer name "
+        "in the headline or summary, even on a 13G): Berkshire Hathaway / "
+        "Buffett, Pershing Square / Ackman, Scion Asset Management / "
+        "Burry, Soros Fund Management / Soros, Third Point / Loeb, Icahn "
+        "Enterprises / Icahn, Elliott Management / Singer, Trian Partners "
+        "/ Peltz, Starboard Value / Smith, ValueAct / Ubben, Greenlight "
+        "Capital / Einhorn, Tiger Global, Coatue, Lone Pine, Viking "
+        "Global, Renaissance Technologies, Citadel / Griffin, D.E. Shaw, "
+        "Two Sigma, Bridgewater.\n"
+        "  - For tickers on a 13 filing, list ONLY the subject company "
+        "(the issuer the stake is in), NOT the filer.\n\n"
         "OUTPUT SCHEMA per item (one JSON object, in input order):\n"
         '  "impact": int 1-10\n'
         '  "recommendation": "buy" | "sell" | "skip"\n'
@@ -901,6 +1110,20 @@ def main() -> int:
             seen.append(it["id"])
 
     save_state({"seen": seen})
+
+    # Enrich SEC 13 items with their filer's name (extracted from the linked
+    # index.htm — the atom feed only carries the subject company). Done after
+    # state save so a failed enrichment doesn't cause us to re-process the
+    # item on the next cron tick.
+    for it in new_items:
+        if it.get("source") == "SEC 13":
+            try:
+                enrich_sec_13(it)
+            except Exception as e:
+                print(
+                    f"# enrich_sec_13 failed for {it.get('link')}: {e}",
+                    file=sys.stderr,
+                )
 
     if is_first_run:
         print(
