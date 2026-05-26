@@ -292,6 +292,8 @@ SMART_MONEY_FILERS: list[str] = [
     "d.e. shaw", "d. e. shaw",
     "two sigma",
     "bridgewater",
+    "duquesne family office", "duquesne capital", "stanley druckenmiller",
+    "situational awareness", "leopold aschenbrenner",
 ]
 
 # Bullish NIST/Commerce keywords — federal money flowing toward named
@@ -514,7 +516,8 @@ def llm_classify(items: list[dict], api_key: str) -> list[dict]:
         "/ Peltz, Starboard Value / Smith, ValueAct / Ubben, Greenlight "
         "Capital / Einhorn, Tiger Global, Coatue, Lone Pine, Viking "
         "Global, Renaissance Technologies, Citadel / Griffin, D.E. Shaw, "
-        "Two Sigma, Bridgewater.\n"
+        "Two Sigma, Bridgewater, Duquesne Family Office / Stanley "
+        "Druckenmiller, Situational Awareness LP / Leopold Aschenbrenner.\n"
         "  - For tickers on a 13 filing, list ONLY the subject company "
         "(the issuer the stake is in), NOT the filer.\n\n"
         "OUTPUT SCHEMA per item (one JSON object, in input order):\n"
@@ -1081,6 +1084,582 @@ def maybe_send_daily_digest() -> bool:
     return sent
 
 
+# ---------- Managed-filer 13F tracking ----------
+#
+# Some hedge fund / family office managers' quarterly Form 13F-HR filings
+# are watched specifically. Every new 13F is parsed, diffed against the
+# prior quarter's snapshot, and pushed as one informational ntfy digest
+# (new positions / exits / big adds / big trims). This channel bypasses
+# the BUY/SELL gate — 13Fs are inherently retrospective digests, not
+# directional signals.
+#
+# Coverage caveat: a 13F captures only US-listed long positions (and
+# put/call options) held on the last day of the quarter. It does NOT
+# include shorts, intra-quarter trades, futures, FX, crypto, bonds, or
+# foreign-only positions. For these managers, the 13F IS the public
+# trade record — they don't file Form 4 (not officers/directors of
+# public companies) and their "personal" capital sits inside the same
+# fund that files the 13F.
+
+MANAGED_FILERS: list[tuple[str, str]] = [
+    # (display label, CIK)
+    ("Druckenmiller", "0001536411"),   # Duquesne Family Office LLC
+    ("Aschenbrenner", "0002045724"),   # Situational Awareness LP
+]
+
+THIRTEEN_F_DIR = STATE_DIR / "13f"
+# Triggers for "big add" / "big trim" detection — must satisfy BOTH:
+#   (a) share-count delta beyond BIG_DELTA (50%), AND
+#   (b) trade dollar size at least MIN_TRADE_PCT_OF_PORTFOLIO of the
+#       relevant portfolio (current for adds, prior for trims).
+# (b) is what filters out the noise case of doubling a $500K residue
+# in a $4B portfolio — that's a "+100% share count" event but only
+# 0.01% of the portfolio.
+#
+# The same MIN_TRADE_PCT_OF_PORTFOLIO threshold also gates which NEW
+# positions and EXITS make the digest (otherwise Aschenbrenner's
+# 28-position-to-42-position quarter would push 23 new-position lines).
+BIG_DELTA = 0.50
+MIN_TRADE_PCT_OF_PORTFOLIO = 0.005  # 0.5% of portfolio
+
+_PERIOD_OF_REPORT_RE = re.compile(
+    r"Period of Report[^\d]*?(\d{4}-\d{2}-\d{2})"
+)
+_HOLDINGS_XML_RE = re.compile(
+    r'href="(/Archives/edgar/data/[^"]+?\.xml)"'
+)
+
+
+def _13f_atom_url(cik: str) -> str:
+    """Per-CIK EDGAR atom feed scoped to 13F-HR filings (last 10)."""
+    return (
+        f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany"
+        f"&CIK={cik}&type=13F-HR&dateb=&owner=include&count=10&output=atom"
+    )
+
+
+def _parse_13f_atom(xml_bytes: bytes) -> list[dict]:
+    """Parse the per-CIK 13F-HR atom feed. EDGAR uses a nested
+    <content type="text/xml"> block with <accession-number>, <filing-date>,
+    and <filing-href> tags rather than the flat <summary>/<link> shape
+    used by getcurrent."""
+    out: list[dict] = []
+    try:
+        root = ET.fromstring(xml_bytes)
+    except ET.ParseError as e:
+        print(f"# 13F atom parse error: {e}", file=sys.stderr)
+        return out
+    _strip_ns(root)
+    for entry in root.iter("entry"):
+        cat = entry.find("category")
+        form_type = cat.get("term", "") if cat is not None else ""
+        if not form_type.startswith("13F-HR"):
+            continue
+        content = entry.find("content")
+        if content is None:
+            continue
+        accession = (content.findtext("accession-number") or "").strip()
+        filing_date = (content.findtext("filing-date") or "").strip()
+        filing_href = (content.findtext("filing-href") or "").strip()
+        if accession and filing_href:
+            out.append({
+                "accession": accession,
+                "filing_date": filing_date,
+                "index_link": filing_href,
+                "form_type": form_type,
+            })
+    return out
+
+
+def _resolve_holdings_xml_url(index_url: str) -> tuple[str, str]:
+    """Locate the holdings XML inside an EDGAR 13F filing-index page.
+
+    A 13F filing has these XML files: primary_doc.xml (form header,
+    contains Period of Report), holdings XML (variable filename per
+    filer — e.g. form13f_YYYYMMDD.xml or salp13fq1xml.xml), plus
+    xsl-styled previews under xslForm13F_X02/. The holdings XML is the
+    .xml that is NOT primary_doc.xml and NOT inside xslForm13F_X02/.
+
+    Returns (holdings_xml_full_url, period_of_report_iso)."""
+    html = fetch(index_url, timeout=20).decode("utf-8", errors="replace")
+    period_m = _PERIOD_OF_REPORT_RE.search(html)
+    period = period_m.group(1) if period_m else ""
+    holdings_path = None
+    for p in _HOLDINGS_XML_RE.findall(html):
+        if "xslForm13F" in p:
+            continue
+        if p.endswith("/primary_doc.xml"):
+            continue
+        holdings_path = p
+        break
+    if not holdings_path:
+        raise RuntimeError(f"No holdings XML found in index {index_url}")
+    return ("https://www.sec.gov" + holdings_path, period)
+
+
+def _parse_holdings_xml(xml_bytes: bytes) -> list[dict]:
+    """Parse the holdings XML of a 13F-HR filing into a list of dicts.
+    Handles both unnamespaced (Duquesne) and ns1-namespaced (Situational
+    Awareness) variants via the existing _strip_ns helper. Returns raw
+    values as filed — caller normalizes thousands vs dollars."""
+    root = ET.fromstring(xml_bytes)
+    _strip_ns(root)
+    out: list[dict] = []
+    for it in root.iter("infoTable"):
+        issuer = (it.findtext("nameOfIssuer") or "").strip()
+        cusip = (it.findtext("cusip") or "").strip()
+        title_class = (it.findtext("titleOfClass") or "").strip()
+        try:
+            value_raw = float((it.findtext("value") or "0").strip())
+        except ValueError:
+            value_raw = 0.0
+        shrs_el = it.find("shrsOrPrnAmt")
+        shares = 0
+        amount_type = ""
+        if shrs_el is not None:
+            try:
+                shares = int(shrs_el.findtext("sshPrnamt") or "0")
+            except ValueError:
+                shares = 0
+            amount_type = (shrs_el.findtext("sshPrnamtType") or "").strip()
+        putcall = (it.findtext("putCall") or "").strip().upper() or None
+        if not cusip:
+            continue
+        out.append({
+            "issuer": issuer,
+            "cusip": cusip,
+            "title_class": title_class,
+            "value_raw": value_raw,
+            "shares": shares,
+            "amount_type": amount_type,
+            "putcall": putcall,
+        })
+    return out
+
+
+def _normalize_holdings_to_usd(holdings: list[dict]) -> list[dict]:
+    """Detect filer's value units (thousands vs dollars) by checking if the
+    total raw value is below the 13F filing threshold ($100M AUM). If so,
+    the filer is using the pre-2023 thousands format; multiply by 1000.
+    Stamps each holding with a 'value_usd' field in actual USD."""
+    total_raw = sum(h["value_raw"] for h in holdings)
+    multiplier = 1000.0 if total_raw < 50_000_000 else 1.0
+    for h in holdings:
+        h["value_usd"] = h["value_raw"] * multiplier
+    return holdings
+
+
+def _13f_snapshot_path(cik: str, period: str) -> Path:
+    safe = (period or "unknown").replace("-", "")
+    return THIRTEEN_F_DIR / f"{cik}_{safe}.json"
+
+
+def _latest_prior_snapshot(cik: str, period: str) -> dict | None:
+    """Return the snapshot for this CIK with the highest period_end strictly
+    older than `period`, or None if no prior snapshot exists yet."""
+    if not THIRTEEN_F_DIR.exists():
+        return None
+    cur_key = (period or "").replace("-", "")
+    prefix = f"{cik}_"
+    candidates: list[tuple[str, Path]] = []
+    for p in THIRTEEN_F_DIR.iterdir():
+        if not p.name.startswith(prefix) or p.suffix != ".json":
+            continue
+        key = p.stem[len(prefix):]
+        if cur_key and key >= cur_key:
+            continue
+        candidates.append((key, p))
+    if not candidates:
+        return None
+    candidates.sort()
+    try:
+        return json.loads(candidates[-1][1].read_text())
+    except Exception:
+        return None
+
+
+def _is_option(h: dict) -> bool:
+    """True if this holding row represents a put or call (rather than a
+    common-stock or ETF position). Used to exempt option opens/closes from
+    the portfolio-% noise filter — options are directional bets where even
+    a small position size signals a real thesis."""
+    return bool((h.get("putcall") or "").strip())
+
+
+def _trade_size_usd(h_new: dict | None, h_old: dict | None) -> float:
+    """Estimate the dollar size of the trade between two quarter-end
+    snapshots, using the implied current-period price to isolate trade
+    activity from price drift.
+
+    For a pure add/trim, we approximate the trade as
+        delta_shares × current_implied_price
+    where current_implied_price = new_value / new_shares. This is a
+    quarter-end snapshot, so the actual fill price could differ; the
+    approximation is good for headline-quality reporting."""
+    new_shares = (h_new or {}).get("shares", 0) or 0
+    new_value = float((h_new or {}).get("value_usd", 0) or 0)
+    old_shares = (h_old or {}).get("shares", 0) or 0
+    old_value = float((h_old or {}).get("value_usd", 0) or 0)
+    if new_shares == 0 and old_shares > 0:
+        return old_value  # full exit — sold what was the prior position
+    if old_shares == 0 and new_shares > 0:
+        return new_value  # new entry — bought the full current position
+    if new_shares <= 0 or new_value <= 0:
+        return abs(new_value - old_value)
+    implied_price = new_value / new_shares
+    return abs(new_shares - old_shares) * implied_price
+
+
+def diff_13f(old: dict | None, new_holdings: list[dict]) -> dict:
+    """Diff two snapshots' holdings. Key by (cusip, putcall) so calls vs
+    puts vs commons in the same name are tracked as separate lines (which
+    matches how the SEC files them).
+
+    Each emitted holding line is annotated with:
+      trade_size_usd  — approximate dollar size of the trade
+      trade_pct       — trade_size_usd / appropriate portfolio total
+      portfolio_pct   — position value / current portfolio total
+      delta_pct       — share-count delta vs prior quarter (big adds/trims)
+
+    Lines are filtered to those whose trade_pct exceeds
+    MIN_TRADE_PCT_OF_PORTFOLIO (to suppress micro-position noise) and
+    sorted by trade size descending."""
+    def key(h: dict) -> tuple:
+        return (h["cusip"], (h.get("putcall") or ""))
+
+    new_map = {key(h): h for h in new_holdings}
+    old_holdings = (old or {}).get("holdings") or []
+    old_map = {key(h): h for h in old_holdings}
+
+    total_new = sum(h.get("value_usd", 0) for h in new_holdings) or 1.0
+    total_prior = sum(
+        h.get("value_usd", 0) for h in old_holdings
+    ) or total_new  # fall back to current portfolio if no prior
+
+    new_positions: list[dict] = []
+    exited: list[dict] = []
+    big_adds: list[dict] = []
+    big_trims: list[dict] = []
+
+    # NEW positions — denominator is current portfolio. Option opens
+    # (puts and calls) bypass the noise filter; commons must clear it.
+    for k, h in new_map.items():
+        if k in old_map:
+            continue
+        trade = _trade_size_usd(h, None)
+        pct = trade / total_new
+        if not _is_option(h) and pct < MIN_TRADE_PCT_OF_PORTFOLIO:
+            continue
+        new_positions.append({
+            **h, "trade_size_usd": trade, "trade_pct": pct,
+            "portfolio_pct": h.get("value_usd", 0) / total_new,
+        })
+
+    # EXITED positions — denominator is prior portfolio. Same option exemption
+    # as NEW: every option close is reported regardless of size.
+    for k, h in old_map.items():
+        if k in new_map:
+            continue
+        trade = _trade_size_usd(None, h)
+        pct = trade / total_prior
+        if not _is_option(h) and pct < MIN_TRADE_PCT_OF_PORTFOLIO:
+            continue
+        exited.append({
+            **h, "trade_size_usd": trade, "trade_pct": pct,
+        })
+
+    # BIG ADDS / BIG TRIMS — must satisfy both share-delta AND trade-pct
+    for k, h_new in new_map.items():
+        h_old = old_map.get(k)
+        if not h_old or h_old.get("shares", 0) == 0:
+            continue
+        share_delta = (h_new["shares"] - h_old["shares"]) / h_old["shares"]
+        if abs(share_delta) < BIG_DELTA:
+            continue
+        trade = _trade_size_usd(h_new, h_old)
+        denom = total_new if share_delta > 0 else total_prior
+        pct = trade / denom
+        if pct < MIN_TRADE_PCT_OF_PORTFOLIO:
+            continue
+        annotated = {
+            **h_new,
+            "delta_pct": share_delta,
+            "prior_shares": h_old["shares"],
+            "prior_value_usd": h_old.get("value_usd", 0),
+            "trade_size_usd": trade,
+            "trade_pct": pct,
+            "portfolio_pct": h_new.get("value_usd", 0) / total_new,
+        }
+        if share_delta > 0:
+            big_adds.append(annotated)
+        else:
+            big_trims.append(annotated)
+
+    for lst in (new_positions, exited, big_adds, big_trims):
+        lst.sort(key=lambda h: -h.get("trade_size_usd", 0))
+
+    return {
+        "new_positions": new_positions,
+        "exited": exited,
+        "big_adds": big_adds,
+        "big_trims": big_trims,
+        "total_value_usd": total_new,
+        "total_value_prior_usd": total_prior,
+        "holding_count": len(new_map),
+        "is_first_snapshot": old is None,
+    }
+
+
+def _fmt_money(usd: float) -> str:
+    if usd >= 1e9:
+        return f"${usd / 1e9:.2f}B"
+    if usd >= 1e6:
+        return f"${usd / 1e6:.0f}M"
+    if usd >= 1e3:
+        return f"${usd / 1e3:.0f}K"
+    return f"${usd:.0f}"
+
+
+def _fmt_pct(pct: float) -> str:
+    """Format a 0-1 fraction as a percentage. Drops to two decimals
+    for sub-0.1% values so a tiny option opening doesn't display as
+    a meaningless '0.0%'."""
+    v = pct * 100
+    if 0 < v < 0.1:
+        return f"{v:.2f}%"
+    return f"{v:.1f}%"
+
+
+def _fmt_new_or_exit_line(h: dict, marker: str) -> str:
+    """Format line for a NEW position or full EXIT — the trade size IS
+    the position size, so we show the dollar amount and its share of the
+    relevant portfolio."""
+    pc = h.get("putcall")
+    suffix = f" [{pc}]" if pc else ""
+    return (
+        f"  {marker} {h.get('issuer', '?')}{suffix}: "
+        f"{_fmt_money(h.get('trade_size_usd', 0))} "
+        f"({_fmt_pct(h.get('trade_pct', 0))})"
+    )
+
+
+def _fmt_change_line(h: dict, marker: str, sign: str) -> str:
+    """Format line for a BIG ADD or BIG TRIM — shows trade size (with
+    sign), the new position value, and the trade as % of portfolio."""
+    pc = h.get("putcall")
+    suffix = f" [{pc}]" if pc else ""
+    trade = h.get("trade_size_usd", 0)
+    return (
+        f"  {marker} {h.get('issuer', '?')}{suffix}: "
+        f"{sign}{_fmt_money(trade)} -> {_fmt_money(h.get('value_usd', 0))} "
+        f"({_fmt_pct(h.get('trade_pct', 0))})"
+    )
+
+
+def notify_13f_digest(label: str, cik: str, period: str, diff: dict) -> bool:
+    """Push one ntfy digest summarizing a 13F-HR filing's diff against the
+    prior quarter (or top-10 holdings if no prior snapshot exists)."""
+    if not NTFY_TOPIC:
+        return False
+
+    title = (
+        f"13F: {label} {period} "
+        f"({_fmt_money(diff['total_value_usd'])}, "
+        f"{diff['holding_count']} positions)"
+    )
+
+    body_lines: list[str] = []
+    if diff["is_first_snapshot"]:
+        body_lines.append(
+            "First snapshot for this manager — top 10 holdings by value "
+            "(no prior quarter to diff against):"
+        )
+        top10 = sorted(
+            diff["new_positions"], key=lambda h: -h.get("value_usd", 0),
+        )[:10]
+        for h in top10:
+            # First-snapshot holdings have trade_pct = portfolio_pct because
+            # the whole position is "new" against an empty prior.
+            body_lines.append(_fmt_new_or_exit_line(h, "*"))
+    else:
+        # Split each section into commons (capped) and options (uncapped) —
+        # the user wants EVERY option open/close surfaced regardless of size.
+        new_opts = [h for h in diff["new_positions"] if _is_option(h)]
+        new_commons = [h for h in diff["new_positions"] if not _is_option(h)]
+        exit_opts = [h for h in diff["exited"] if _is_option(h)]
+        exit_commons = [h for h in diff["exited"] if not _is_option(h)]
+
+        sections = 0
+        if new_commons:
+            body_lines.append(
+                f"NEW commons ({len(new_commons)}) "
+                f"— % of current portfolio:"
+            )
+            for h in new_commons[:8]:
+                body_lines.append(_fmt_new_or_exit_line(h, "+"))
+            body_lines.append("")
+            sections += 1
+        if new_opts:
+            body_lines.append(
+                f"NEW options ({len(new_opts)}) — all shown, "
+                f"% of current portfolio:"
+            )
+            for h in new_opts:
+                body_lines.append(_fmt_new_or_exit_line(h, "+"))
+            body_lines.append("")
+            sections += 1
+        if exit_commons:
+            body_lines.append(
+                f"EXITED commons ({len(exit_commons)}) "
+                f"— % of prior portfolio:"
+            )
+            for h in exit_commons[:8]:
+                body_lines.append(_fmt_new_or_exit_line(h, "-"))
+            body_lines.append("")
+            sections += 1
+        if exit_opts:
+            body_lines.append(
+                f"EXITED options ({len(exit_opts)}) — all shown, "
+                f"% of prior portfolio:"
+            )
+            for h in exit_opts:
+                body_lines.append(_fmt_new_or_exit_line(h, "-"))
+            body_lines.append("")
+            sections += 1
+        if diff["big_adds"]:
+            body_lines.append(
+                f"BIG ADDS ({len(diff['big_adds'])}) "
+                f"— +X% trade size of current portfolio:"
+            )
+            for h in diff["big_adds"][:6]:
+                body_lines.append(_fmt_change_line(h, "^", "+"))
+            body_lines.append("")
+            sections += 1
+        if diff["big_trims"]:
+            body_lines.append(
+                f"BIG TRIMS ({len(diff['big_trims'])}) "
+                f"— -X% trade size of prior portfolio:"
+            )
+            for h in diff["big_trims"][:6]:
+                body_lines.append(_fmt_change_line(h, "v", "-"))
+            body_lines.append("")
+            sections += 1
+        if sections == 0:
+            body_lines.append(
+                "No material changes from prior quarter "
+                f"(all trades < {_fmt_pct(MIN_TRADE_PCT_OF_PORTFOLIO)} "
+                "of portfolio and no option opens/closes)."
+            )
+
+    body_lines.append("")
+    body_lines.append(
+        f"https://www.sec.gov/cgi-bin/browse-edgar?"
+        f"action=getcompany&CIK={cik}&type=13F-HR"
+    )
+    body = "\n".join(body_lines).rstrip().encode("utf-8")
+    headers = {
+        "Title": title.encode("utf-8"),
+        "Priority": "default",
+        "Tags": "moneybag",
+    }
+    url = f"https://ntfy.sh/{NTFY_TOPIC}"
+    try:
+        req = urllib.request.Request(
+            url, data=body, headers=headers, method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=15) as r:
+            return 200 <= r.status < 300
+    except Exception as e:
+        print(
+            f"# 13F digest push failed for {label} {period}: {e}",
+            file=sys.stderr,
+        )
+        return False
+
+
+def poll_managed_filers() -> int:
+    """For each MANAGED_FILERS entry, check EDGAR for new 13F-HR filings,
+    parse holdings, diff against the prior quarter's snapshot, push one
+    digest per new filing, and persist the snapshot.
+
+    First-run behaviour per filer: if no snapshots exist yet for the CIK,
+    backfill the atom feed's history silently (no digests pushed) so that
+    future filings have a real diff baseline. Subsequent runs push a digest
+    on every genuinely-new filing.
+
+    Returns the number of digests pushed this cycle."""
+    THIRTEEN_F_DIR.mkdir(parents=True, exist_ok=True)
+    pushed = 0
+    for label, cik in MANAGED_FILERS:
+        # Snapshot existence pre-loop is the "first run for this CIK" flag.
+        has_prior_for_cik = any(
+            p.name.startswith(f"{cik}_") and p.suffix == ".json"
+            for p in THIRTEEN_F_DIR.iterdir()
+        )
+        try:
+            atom = fetch(_13f_atom_url(cik), timeout=20)
+        except Exception as e:
+            print(
+                f"# 13F atom fetch failed for {label} ({cik}): {e}",
+                file=sys.stderr,
+            )
+            continue
+        entries = _parse_13f_atom(atom)
+        # Process oldest -> newest so each filing's diff sees the prior one.
+        entries.sort(key=lambda e: e.get("filing_date") or "")
+        for entry in entries:
+            try:
+                xml_url, period = _resolve_holdings_xml_url(entry["index_link"])
+            except Exception as e:
+                print(
+                    f"# 13F index parse failed for {label} {entry['accession']}: {e}",
+                    file=sys.stderr,
+                )
+                continue
+            if not period:
+                continue
+            snap_path = _13f_snapshot_path(cik, period)
+            if snap_path.exists():
+                continue  # already processed this filing
+
+            try:
+                holdings_raw = _parse_holdings_xml(
+                    fetch(xml_url, timeout=20)
+                )
+                holdings = _normalize_holdings_to_usd(holdings_raw)
+            except Exception as e:
+                print(
+                    f"# 13F holdings parse failed for {label} {entry['accession']}: {e}",
+                    file=sys.stderr,
+                )
+                continue
+
+            prior = _latest_prior_snapshot(cik, period)
+
+            # Persist the snapshot regardless of push success — durable trail.
+            snap_path.write_text(json.dumps({
+                "cik": cik,
+                "manager": label,
+                "period_end": period,
+                "accession": entry["accession"],
+                "filed_date": entry.get("filing_date"),
+                "holdings": holdings,
+            }, indent=2))
+
+            # On first-run backfill for this CIK, skip pushing so the user
+            # isn't spammed with one digest per historical quarter.
+            if not has_prior_for_cik:
+                continue
+
+            d = diff_13f(prior, holdings)
+            try:
+                if notify_13f_digest(label, cik, period, d):
+                    pushed += 1
+            except Exception as e:
+                print(f"# 13F digest push exception: {e}", file=sys.stderr)
+    return pushed
+
+
 # ---------- Main ----------
 
 def main() -> int:
@@ -1181,11 +1760,22 @@ def main() -> int:
         print(f"# maybe_send_daily_digest failed: {e}", file=sys.stderr)
         digest_sent = False
 
+    # Check the managed filers (Duquesne / Druckenmiller, Situational
+    # Awareness / Aschenbrenner) for new 13F-HR filings and push a diff
+    # digest. Their 13Fs land 45 days after quarter-end and are rare, so
+    # this is a no-op on most cron ticks.
+    try:
+        managed_pushed = poll_managed_filers()
+    except Exception as e:
+        print(f"# poll_managed_filers failed: {e}", file=sys.stderr)
+        managed_pushed = 0
+
     print(
         f"Fetched {len(all_items)} items, {len(new_items)} new, "
         f"{len(alerted)} alerted, {suppressed_skip} suppressed (no clear "
         f"buy/sell), {newly_scored} newly scored, "
-        f"digest_sent={digest_sent} "
+        f"digest_sent={digest_sent}, "
+        f"managed_13f_pushed={managed_pushed} "
         f"[{', '.join(alerted) if alerted else '-'}]. "
         f"Errors: {errors if errors else 'none'}"
     )
