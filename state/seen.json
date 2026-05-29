@@ -3154,6 +3154,19 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-025723",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-246361",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001571123-26-000074",
-    "NIST::https://www.nist.gov/node/1913226"
+    "NIST::https://www.nist.gov/node/1913226",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000930413-26-001750",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000930413-26-001749",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-247316",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001911066-26-000079",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-247179",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-018834",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-023251",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001829576-26-000053",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001466593-26-000057",
+    "Trump::https://trumpstruth.org/statuses/38855",
+    "Trump::https://trumpstruth.org/statuses/38853",
+    "Trump::https://trumpstruth.org/statuses/38852",
+    "Trump::https://trumpstruth.org/statuses/38854"
   ]
 }
