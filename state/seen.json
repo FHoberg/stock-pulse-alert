@@ -1,6 +1,5 @@
 {
   "seen": [
-    "Trump::https://trumpstruth.org/statuses/38272",
     "Trump::https://trumpstruth.org/statuses/38268",
     "Trump::https://trumpstruth.org/statuses/38267",
     "Trump::https://trumpstruth.org/statuses/38266",
@@ -4999,6 +4998,7 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001171843-26-004099",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001021771-26-000093",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-042932",
-    "Trump::https://trumpstruth.org/statuses/39233"
+    "Trump::https://trumpstruth.org/statuses/39233",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260501a.htm"
   ]
 }
