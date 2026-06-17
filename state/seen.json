@@ -1,16 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001315257-26-000041",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001179929-26-000026",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001654954-26-004650",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-058332",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001002638-26-000048",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000320121-26-000021",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-022153",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-215848",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-215839",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-215838",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-033162",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-033161",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-022150",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-033160",
@@ -4999,6 +4988,17 @@
     "Trump::https://trumpstruth.org/statuses/39307",
     "Trump::https://trumpstruth.org/statuses/39308",
     "Trump::https://trumpstruth.org/statuses/39309",
-    "Trump::https://trumpstruth.org/statuses/39310"
+    "Trump::https://trumpstruth.org/statuses/39310",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-074744",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001582961-26-000051",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-069357",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001731122-26-000866",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001084991-26-000058",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001058090-26-000056",
+    "Trump::https://trumpstruth.org/statuses/39317",
+    "Trump::https://trumpstruth.org/statuses/39316",
+    "Trump::https://trumpstruth.org/statuses/39314",
+    "Trump::https://trumpstruth.org/statuses/39315",
+    "Trump::https://trumpstruth.org/statuses/39313"
   ]
 }
