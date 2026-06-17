@@ -1,16 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001581760-26-000079",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001703057-26-000027",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001723596-26-000021",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-033474",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-058655",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-033473",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-216777",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-022227",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-058654",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-033471",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-216776",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-054480",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001636422-26-000064",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-022226",
@@ -4999,6 +4988,17 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-273544",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000714562-26-000041",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-025533",
-    "Trump::https://trumpstruth.org/statuses/39318"
+    "Trump::https://trumpstruth.org/statuses/39318",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-020926",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-075050",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-075025",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-273812",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-020914",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000079732-26-000009",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000004962-26-000270",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-029053",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617b.htm",
+    "Trump::https://trumpstruth.org/statuses/39319"
   ]
 }
