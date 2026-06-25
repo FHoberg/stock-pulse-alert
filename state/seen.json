@@ -1,16 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-023414",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-021514",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-057223",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001999371-26-010790",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001210708-26-000058",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-023412",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-021511",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000947871-26-000546",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001171843-26-003459",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-225491",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-225488",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001580560-26-000007",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-035349",
     "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260515a.htm",
@@ -4999,6 +4988,17 @@
     "Trump::https://trumpstruth.org/statuses/39525",
     "Trump::https://trumpstruth.org/statuses/39522",
     "Trump::https://trumpstruth.org/statuses/39523",
-    "Trump::https://trumpstruth.org/statuses/39524"
+    "Trump::https://trumpstruth.org/statuses/39524",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000950103-26-009471",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-021617",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-281731",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-281713",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-030000",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-077404",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-071639",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001564708-26-000139",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-029980",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-281328",
+    "Trump::https://trumpstruth.org/statuses/39526"
   ]
 }
