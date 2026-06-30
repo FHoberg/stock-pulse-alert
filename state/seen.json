@@ -1,20 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-063919",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-017809",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-231043",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-231040",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-059096",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-024444",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-024443",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-231030",
-    "Trump::https://trumpstruth.org/statuses/38636",
-    "Trump::https://trumpstruth.org/statuses/38635",
-    "Trump::https://trumpstruth.org/statuses/38658",
-    "Trump::https://trumpstruth.org/statuses/38659",
-    "Trump::https://trumpstruth.org/statuses/38660",
-    "Trump::https://trumpstruth.org/statuses/38661",
-    "Trump::https://trumpstruth.org/statuses/38642",
     "Trump::https://trumpstruth.org/statuses/38643",
     "Trump::https://trumpstruth.org/statuses/38644",
     "Trump::https://trumpstruth.org/statuses/38645",
@@ -4999,6 +4984,21 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-022087",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-046143",
     "Fed::https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260630a.htm",
-    "Trump::https://trumpstruth.org/statuses/39629"
+    "Trump::https://trumpstruth.org/statuses/39629",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001325878-26-000129",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-046182",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-079211",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001004702-26-000114",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001661306-26-000049",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001326771-26-000107",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-031238",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331451-26-000117",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001756761-26-000097",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-079183",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001330399-26-000073",
+    "Trump::https://trumpstruth.org/statuses/39633",
+    "Trump::https://trumpstruth.org/statuses/39632",
+    "Trump::https://trumpstruth.org/statuses/39631",
+    "Trump::https://trumpstruth.org/statuses/39630"
   ]
 }
