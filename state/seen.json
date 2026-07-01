@@ -1,6 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-234180",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001859919-26-000043",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-234177",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000352825-26-000031",
@@ -4999,6 +4998,7 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001753926-26-001120",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-292684",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-292677",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001527469-26-000043"
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001527469-26-000043",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260521a.htm"
   ]
 }
