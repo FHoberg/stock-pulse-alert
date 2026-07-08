@@ -1,14 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001539497-26-001608",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-038702",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001713407-26-000060",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001880319-26-000039",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001911066-26-000074",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001737924-26-000052",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331463-26-000103",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-061945",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-023093",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001654954-26-005470",
     "Trump::https://trumpstruth.org/statuses/38843",
     "Trump::https://trumpstruth.org/statuses/38844",
@@ -4999,6 +4990,15 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-081584",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001171843-26-004528",
     "Trump::https://trumpstruth.org/statuses/39894",
-    "Trump::https://trumpstruth.org/statuses/39893"
+    "Trump::https://trumpstruth.org/statuses/39893",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000823277-26-000025",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-032424",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-081699",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001171520-26-000170",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-076250",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000357173-26-000037",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-298149",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260528a.htm",
+    "SEC 13::urn:tag:sec.gov,2008:accession-number=0001104659-26-081696"
   ]
 }
