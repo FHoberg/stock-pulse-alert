@@ -1,14 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-062949",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001476840-26-000050",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-062937",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001520138-26-000196",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-039245",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-248711",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-062935",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-026431",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-068357",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-039243",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001683168-26-004399",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001021771-26-000084",
@@ -4999,6 +4990,15 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-047746",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001330399-26-000081",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331757-26-000124",
-    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm"
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001316944-26-000117",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331463-26-000130",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331754-26-000139",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001062993-26-003576",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001654954-26-006563",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331465-26-000125",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-082201",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-082198",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001326771-26-000111"
   ]
 }
