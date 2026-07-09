@@ -1,16 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-026451",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-068382",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-248897",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-062972",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-248886",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-026442",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-062961",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-068374",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001829576-26-000056",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001819438-26-000039",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-068370",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-062949",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001476840-26-000050",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-062937",
@@ -4999,6 +4988,17 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001828318-26-000050",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-023097",
     "NIST::https://www.nist.gov/node/1916086",
-    "NIST::https://www.nist.gov/node/1913226"
+    "NIST::https://www.nist.gov/node/1913226",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001314152-26-000132",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331451-26-000121",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001888524-26-012462",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001722556-26-000027",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001888524-26-012460",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-082168",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001325814-26-000106",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-047746",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001330399-26-000081",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331757-26-000124",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260709a.htm"
   ]
 }
