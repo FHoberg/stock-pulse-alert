@@ -1,16 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000912767-26-000035",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-063161",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-249823",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-026534",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-068604",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-249799",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-249790",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-026533",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000067215-26-000028",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001895262-26-000129",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-063157",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-068595",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001527166-26-000030",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000059558-26-000038",
@@ -4999,6 +4988,17 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001516912-26-000038",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001477932-26-004244",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-047852",
-    "Trump::https://trumpstruth.org/statuses/39917"
+    "Trump::https://trumpstruth.org/statuses/39917",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-023298",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-082584",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-300789",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001539497-26-001945",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-300763",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-023293",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001477932-26-004250",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001084991-26-000064",
+    "Trump::https://trumpstruth.org/statuses/39920",
+    "Trump::https://trumpstruth.org/statuses/39919",
+    "Trump::https://trumpstruth.org/statuses/39918"
   ]
 }
