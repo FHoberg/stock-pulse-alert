@@ -1,18 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000937098-26-000041",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001730984-26-000059",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-075194",
-    "SEC 13::urn:tag:sec.gov,2008:accession-number=0001104659-26-075210",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001096906-26-000966",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001079973-26-000855",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-029134",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-274410",
-    "Trump::https://trumpstruth.org/statuses/39321",
-    "Trump::https://trumpstruth.org/statuses/39320",
-    "Trump::https://trumpstruth.org/statuses/39334",
-    "Trump::https://trumpstruth.org/statuses/39333",
-    "Trump::https://trumpstruth.org/statuses/39332",
     "Trump::https://trumpstruth.org/statuses/39330",
     "Trump::https://trumpstruth.org/statuses/39331",
     "Trump::https://trumpstruth.org/statuses/39329",
@@ -4999,6 +4986,19 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-029689",
     "Trump::https://trumpstruth.org/statuses/40302",
     "Trump::https://trumpstruth.org/statuses/40301",
-    "SEC 13::urn:tag:sec.gov,2008:accession-number=0001104659-26-086886"
+    "SEC 13::urn:tag:sec.gov,2008:accession-number=0001104659-26-086886",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000897101-26-000335",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-317597",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001829576-26-000073",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001304280-26-000026",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000726601-26-000022",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-317484",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617b.htm",
+    "Trump::https://trumpstruth.org/statuses/40305",
+    "Trump::https://trumpstruth.org/statuses/40306",
+    "Trump::https://trumpstruth.org/statuses/40307",
+    "Trump::https://trumpstruth.org/statuses/40303",
+    "Trump::https://trumpstruth.org/statuses/40304"
   ]
 }
