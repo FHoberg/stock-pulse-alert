@@ -1,15 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-029517",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-276808",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-021262",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000918541-26-000049",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-029515",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-029512",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-044501",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001163609-26-000019",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-044499",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-029507",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0002001557-26-000125",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000950157-26-000735",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-029504",
@@ -4999,6 +4989,16 @@
     "Trump::https://trumpstruth.org/statuses/40382",
     "Trump::https://trumpstruth.org/statuses/40376",
     "Trump::https://trumpstruth.org/statuses/40374",
-    "Trump::https://trumpstruth.org/statuses/40375"
+    "Trump::https://trumpstruth.org/statuses/40375",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-087481",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-320597",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-034990",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331757-26-000134",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001477932-26-004556",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331463-26-000151",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001133311-26-000015",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001654954-26-006959",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001326771-26-000121",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000023217-26-000032"
   ]
 }
