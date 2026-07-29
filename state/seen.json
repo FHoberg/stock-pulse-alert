@@ -1,12 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001651562-26-000051",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000950142-26-001848",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000049938-26-000029",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-021350",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001477932-26-003952",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-076648",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-070853",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001079973-26-000859",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-278533",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001651562-26-000050",
@@ -4999,6 +4992,13 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001888524-26-013969",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001539497-26-002023",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-323159",
-    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm"
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-323594",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001911066-26-000091",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-082767",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-323489",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001539497-26-002025",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001888524-26-014009",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001888524-26-014001"
   ]
 }
