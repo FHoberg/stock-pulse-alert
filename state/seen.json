@@ -1,9 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001653482-26-000139",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-045277",
-    "Trump::https://trumpstruth.org/statuses/39521",
-    "Trump::https://trumpstruth.org/statuses/39520",
     "Trump::https://trumpstruth.org/statuses/39518",
     "Trump::https://trumpstruth.org/statuses/39519",
     "Trump::https://trumpstruth.org/statuses/39517",
@@ -4999,6 +4995,10 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001655210-26-000049",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-326289",
     "Fed::https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260624a.htm",
-    "Trump::https://trumpstruth.org/statuses/40397"
+    "Trump::https://trumpstruth.org/statuses/40397",
+    "Trump::https://trumpstruth.org/statuses/40398",
+    "Trump::https://trumpstruth.org/statuses/40399",
+    "Trump::https://trumpstruth.org/statuses/40400",
+    "Trump::https://trumpstruth.org/statuses/40401"
   ]
 }
