@@ -1,11 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-290830",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-290829",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-290823",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-026982",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-031317",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-079401",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001654954-26-006366",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-046295",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001824502-26-000046",
@@ -4999,6 +4993,12 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-025825",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001907982-26-000123",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001552781-26-000404",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000799233-26-000037"
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000799233-26-000037",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-334549",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000773141-26-000015",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-334453",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001683168-26-005972",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000089089-26-000085",
+    "NIST::https://www.nist.gov/node/1917846"
   ]
 }
