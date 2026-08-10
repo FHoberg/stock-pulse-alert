@@ -1,15 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-080797",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-047308",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001585364-26-000108",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001683168-26-005311",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-296288",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001022408-26-000064",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-022802",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-032176",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001662972-26-000085",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001651562-26-000055",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-047296",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-022794",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-080775",
@@ -4999,6 +4989,16 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000908255-26-000054",
     "NIST::https://www.nist.gov/node/1900811",
     "NIST::https://www.nist.gov/node/1899781",
-    "NIST::https://www.nist.gov/node/1898826"
+    "NIST::https://www.nist.gov/node/1898826",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-341548",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-087062",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000089439-26-000036",
+    "Trump::https://trumpstruth.org/statuses/40701",
+    "NIST::https://www.nist.gov/node/1898176",
+    "NIST::https://www.nist.gov/node/1898156",
+    "NIST::https://www.nist.gov/node/1897951",
+    "NIST::https://www.nist.gov/node/1897371",
+    "NIST::https://www.nist.gov/node/1897026",
+    "NIST::https://www.nist.gov/node/1897011"
   ]
 }
