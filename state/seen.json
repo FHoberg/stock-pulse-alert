@@ -1,17 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001535929-26-000138",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001488813-26-000078",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-023058",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-076443",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-076444",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-081842",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-298682",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001841666-26-000045",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001851048-26-000011",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001500435-26-000028",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-076435",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-047674",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001058090-26-000058",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-076432",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001683168-26-005361",
@@ -4999,6 +4987,18 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-345046",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000779152-26-000052",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001753926-26-001428",
-    "Trump::https://trumpstruth.org/statuses/40734"
+    "Trump::https://trumpstruth.org/statuses/40734",
+    "Trump::https://trumpstruth.org/statuses/40740",
+    "Trump::https://trumpstruth.org/statuses/40741",
+    "Trump::https://trumpstruth.org/statuses/40742",
+    "Trump::https://trumpstruth.org/statuses/40743",
+    "Trump::https://trumpstruth.org/statuses/40744",
+    "Trump::https://trumpstruth.org/statuses/40745",
+    "Trump::https://trumpstruth.org/statuses/40746",
+    "Trump::https://trumpstruth.org/statuses/40739",
+    "Trump::https://trumpstruth.org/statuses/40737",
+    "Trump::https://trumpstruth.org/statuses/40738",
+    "Trump::https://trumpstruth.org/statuses/40736",
+    "Trump::https://trumpstruth.org/statuses/40735"
   ]
 }
