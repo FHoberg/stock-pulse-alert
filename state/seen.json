@@ -1,9 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-082926",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001835830-26-000032",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0002011641-26-000035",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001129928-26-000043",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-032963",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-082912",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001564708-26-000150",
@@ -4999,6 +4995,10 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331451-26-000152",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-348222",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000038009-26-000052",
-    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm"
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000927089-26-000148",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001316944-26-000138",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001326771-26-000135",
+    "NIST::https://www.nist.gov/node/1918446"
   ]
 }
