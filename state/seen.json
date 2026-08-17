@@ -1,6 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-305383",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001552781-26-000382",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000040545-26-000047",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000759944-26-000133",
@@ -4999,6 +4998,7 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001640334-26-001384",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001062993-26-004452",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-353639",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000783324-26-000043"
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000783324-26-000043",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001756761-26-000119"
   ]
 }
