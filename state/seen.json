@@ -1,10 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001171843-26-004783",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-309112",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-034018",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001030469-26-000034",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-079830",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001280784-26-000032",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-309602",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-085238",
@@ -4999,6 +4994,11 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001856437-26-000017",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-357818",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-039360",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000104169-26-000145"
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000104169-26-000145",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-039364",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-091893",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001803498-26-000051",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000807882-26-000094",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-098992"
   ]
 }
