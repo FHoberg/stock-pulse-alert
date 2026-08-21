@@ -1,13 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-085476",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-049080",
-    "Trump::https://trumpstruth.org/statuses/40202",
-    "Trump::https://trumpstruth.org/statuses/40203",
-    "Trump::https://trumpstruth.org/statuses/40204",
-    "Trump::https://trumpstruth.org/statuses/40205",
-    "Trump::https://trumpstruth.org/statuses/40206",
-    "Trump::https://trumpstruth.org/statuses/40207",
     "Trump::https://trumpstruth.org/statuses/40208",
     "Trump::https://trumpstruth.org/statuses/40209",
     "Trump::https://trumpstruth.org/statuses/40201",
@@ -4999,6 +4991,14 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000817720-26-000061",
     "Trump::https://trumpstruth.org/statuses/41042",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000950103-26-012737",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-359930"
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-359930",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-359991",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000035527-26-000209",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-028678",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-039565",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-028677",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001728117-26-000077",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-359953",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-099390"
   ]
 }
