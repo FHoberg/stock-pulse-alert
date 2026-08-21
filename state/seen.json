@@ -1,6 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001077183-26-000049",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-049105",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-049104",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-049103",
@@ -4999,6 +4998,7 @@
     "Trump::https://trumpstruth.org/statuses/41036",
     "Trump::https://trumpstruth.org/statuses/41038",
     "Trump::https://trumpstruth.org/statuses/41039",
-    "Trump::https://trumpstruth.org/statuses/41040"
+    "Trump::https://trumpstruth.org/statuses/41040",
+    "Trump::https://trumpstruth.org/statuses/41041"
   ]
 }
