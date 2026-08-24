@@ -1,15 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-314242",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-024336",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-314223",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-049412",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000868671-26-000062",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001751783-26-000035",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-086283",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001488813-26-000082",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-080917",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-314214",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-314213",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-080916",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-049409",
@@ -4999,6 +4989,16 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-058519",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001683168-26-006679",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-361845",
-    "Trump::https://trumpstruth.org/statuses/41151"
+    "Trump::https://trumpstruth.org/statuses/41151",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-039796",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-100077",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001590976-26-000031",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-100071",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-100048",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001074828-26-000071",
+    "Trump::https://trumpstruth.org/statuses/41154",
+    "Trump::https://trumpstruth.org/statuses/41152",
+    "Trump::https://trumpstruth.org/statuses/41153",
+    "SEC 13::urn:tag:sec.gov,2008:accession-number=0001193125-26-362085"
   ]
 }
