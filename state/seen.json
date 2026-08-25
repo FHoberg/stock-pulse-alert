@@ -1,15 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000930413-26-002156",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000930413-26-002155",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001423869-26-000024",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-034532",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0002082557-26-000045",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0002082559-26-000065",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-081438",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-086673",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001129928-26-000047",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-316183",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-049625",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000764065-26-000102",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001683168-26-005764",
@@ -4999,6 +4989,16 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001731122-26-001143",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-039970",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001481792-26-000143",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-364216"
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-364216",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331757-26-000154",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331754-26-000171",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-028879",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-364284",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001325878-26-000170",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000020286-26-000049",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-093276",
+    "Trump::https://trumpstruth.org/statuses/41188",
+    "Trump::https://trumpstruth.org/statuses/41187",
+    "Trump::https://trumpstruth.org/statuses/41186"
   ]
 }
