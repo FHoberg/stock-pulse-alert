@@ -1,10 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-049641",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001683168-26-005765",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-034616",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001999371-26-015856",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000078890-26-000048",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-034615",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-316247",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-086692",
@@ -4999,6 +4994,11 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-093450",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001376986-26-000038",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001683168-26-006718",
-    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/monetary20260825a.htm"
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/monetary20260825a.htm",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001316944-26-000144",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-364810",
+    "Trump::https://trumpstruth.org/statuses/41213",
+    "Trump::https://trumpstruth.org/statuses/41211",
+    "Trump::https://trumpstruth.org/statuses/41212"
   ]
 }
