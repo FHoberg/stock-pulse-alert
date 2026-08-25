@@ -1,15 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-086601",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-315613",
-    "Trump::https://trumpstruth.org/statuses/40236",
-    "Trump::https://trumpstruth.org/statuses/40235",
-    "Trump::https://trumpstruth.org/statuses/40234",
-    "Trump::https://trumpstruth.org/statuses/40233",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001084991-26-000070",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001999371-26-015831",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001316944-26-000128",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-315814",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000930413-26-002156",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000930413-26-002155",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001423869-26-000024",
@@ -4999,6 +4989,16 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001477932-26-005256",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001477932-26-005255",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-093255",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-093249"
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-093249",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-039978",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001330399-26-000105",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001522540-26-000071",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-364239",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001575872-26-000609",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001731122-26-001144",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001731122-26-001143",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-039970",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001481792-26-000143",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-364216"
   ]
 }
