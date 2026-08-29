@@ -1,11 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-035251",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001913724-26-000021",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-035249",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001653477-26-000044",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001282637-26-000015",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001829126-26-008043",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-324223",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-082895",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-035242",
@@ -4999,6 +4993,12 @@
     "Trump::https://trumpstruth.org/statuses/41300",
     "Trump::https://trumpstruth.org/statuses/41301",
     "Trump::https://trumpstruth.org/statuses/41299",
-    "NIST::https://www.nist.gov/node/1914816"
+    "NIST::https://www.nist.gov/node/1914816",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+    "Trump::https://trumpstruth.org/statuses/41359",
+    "Trump::https://trumpstruth.org/statuses/41358",
+    "Trump::https://trumpstruth.org/statuses/41357",
+    "Trump::https://trumpstruth.org/statuses/41356",
+    "Trump::https://trumpstruth.org/statuses/41355"
   ]
 }
