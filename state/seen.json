@@ -1,14 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-333134",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001539497-26-002091",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-036028",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001087294-26-000058",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001829126-26-008337",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001185185-26-003262",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-333122",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-036026",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-052735",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-025731",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-090493",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-036024",
@@ -4999,6 +4990,15 @@
     "Trump::https://www.trumpstruth.org/statuses/41492",
     "Trump::https://www.trumpstruth.org/statuses/41491",
     "NIST::https://www.nist.gov/node/1917301",
-    "NIST::https://www.nist.gov/node/1915436"
+    "NIST::https://www.nist.gov/node/1915436",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
+    "Trump::https://trumpstruth.org/statuses/41504",
+    "Trump::https://trumpstruth.org/statuses/41499",
+    "Trump::https://trumpstruth.org/statuses/41500",
+    "Trump::https://trumpstruth.org/statuses/41501",
+    "Trump::https://trumpstruth.org/statuses/41502",
+    "Trump::https://trumpstruth.org/statuses/41503",
+    "Trump::https://trumpstruth.org/statuses/41498",
+    "Trump::https://trumpstruth.org/statuses/41497"
   ]
 }
