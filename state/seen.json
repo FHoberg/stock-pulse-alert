@@ -1,16 +1,5 @@
 {
   "seen": [
-    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/orders20260804a.htm",
-    "Trump::https://trumpstruth.org/statuses/40543",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001185185-26-003263",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-031282",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001903596-26-000291",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-085285",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-052747",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001801661-26-000084",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-036032",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-025735",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-085281",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-333134",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001539497-26-002091",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-036028",
@@ -4999,6 +4988,17 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001747079-26-000086",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-381926",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001944366-26-000073",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001066194-26-000014"
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001066194-26-000014",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/orders20260804c.htm",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/orders20260804b.htm",
+    "Trump::https://www.trumpstruth.org/statuses/41497",
+    "Trump::https://www.trumpstruth.org/statuses/41496",
+    "Trump::https://www.trumpstruth.org/statuses/41494",
+    "Trump::https://www.trumpstruth.org/statuses/41495",
+    "Trump::https://www.trumpstruth.org/statuses/41493",
+    "Trump::https://www.trumpstruth.org/statuses/41492",
+    "Trump::https://www.trumpstruth.org/statuses/41491",
+    "NIST::https://www.nist.gov/node/1917301",
+    "NIST::https://www.nist.gov/node/1915436"
   ]
 }
