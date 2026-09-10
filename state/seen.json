@@ -1,18 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-026648",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001564708-26-000176",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001699350-26-000054",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-054993",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001398733-26-000035",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-341207",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-341206",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-341200",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-093011",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-054988",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001834488-26-000044",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-341191",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-341190",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-086933",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-031932",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-054986",
@@ -4999,6 +4986,19 @@
     "Trump::https://www.trumpstruth.org/statuses/41674",
     "Trump::https://www.trumpstruth.org/statuses/41675",
     "Trump::https://www.trumpstruth.org/statuses/41676",
-    "NIST::https://www.nist.gov/node/1920006"
+    "NIST::https://www.nist.gov/node/1920006",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-106690",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001539497-26-002472",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001539497-26-002471",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001091818-26-000143",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-387717",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000893847-26-000093",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-030059",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001325878-26-000180",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-036159",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001331463-26-000176",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001888524-26-016577",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001888524-26-016575",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000927089-26-000160"
   ]
 }
