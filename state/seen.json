@@ -1,18 +1,5 @@
 {
   "seen": [
-    "Trump::https://trumpstruth.org/statuses/40735",
-    "Trump::https://trumpstruth.org/statuses/40752",
-    "Trump::https://trumpstruth.org/statuses/40753",
-    "Trump::https://trumpstruth.org/statuses/40751",
-    "Trump::https://trumpstruth.org/statuses/40748",
-    "Trump::https://trumpstruth.org/statuses/40749",
-    "Trump::https://trumpstruth.org/statuses/40750",
-    "Trump::https://trumpstruth.org/statuses/40747",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-094391",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-345672",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001829126-26-008636",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001748790-26-000020",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-094331",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-055933",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-345641",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-055930",
@@ -4999,6 +4986,19 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001062993-26-004970",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-042810",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-030492",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001564708-26-000202"
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001564708-26-000202",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000860413-26-000092",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000027879-26-000003",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001756770-26-000111",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-030517",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001171520-26-000264",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000092487-26-000032",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001753926-26-001798",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0002035428-26-000060",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-392667",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-042854",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-392654",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm"
   ]
 }
