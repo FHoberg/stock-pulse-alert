@@ -1,9 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-032600",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-347740",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001670592-26-000039",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-347734",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-088701",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-032638",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-347911",
@@ -4999,6 +4995,10 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000077360-26-000047",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001493152-26-043228",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001670541-26-000105",
-    "Trump::https://www.trumpstruth.org/statuses/41780"
+    "Trump::https://www.trumpstruth.org/statuses/41780",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918b.htm",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
+    "Trump::https://www.trumpstruth.org/statuses/41781",
+    "NIST::https://www.nist.gov/node/1920201"
   ]
 }
