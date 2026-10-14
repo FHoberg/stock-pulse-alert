@@ -1,16 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-368838",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001037868-26-000191",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000057131-26-000037",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000353184-26-000088",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-368764",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-059110",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-094001",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-368761",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0002065337-26-000043",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-101533",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001654954-26-007884",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000798359-26-000088",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193805-26-001142",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001731122-26-001152",
@@ -4999,6 +4988,17 @@
     "Trump::https://www.trumpstruth.org/statuses/42308",
     "Trump::https://www.trumpstruth.org/statuses/42309",
     "Trump::https://www.trumpstruth.org/statuses/42310",
-    "Trump::https://www.trumpstruth.org/statuses/42307"
+    "Trump::https://www.trumpstruth.org/statuses/42307",
+    "Trump::https://www.trumpstruth.org/statuses/42318",
+    "Trump::https://www.trumpstruth.org/statuses/42319",
+    "Trump::https://www.trumpstruth.org/statuses/42320",
+    "Trump::https://www.trumpstruth.org/statuses/42321",
+    "Trump::https://www.trumpstruth.org/statuses/42315",
+    "Trump::https://www.trumpstruth.org/statuses/42316",
+    "Trump::https://www.trumpstruth.org/statuses/42317",
+    "Trump::https://www.trumpstruth.org/statuses/42313",
+    "Trump::https://www.trumpstruth.org/statuses/42314",
+    "Trump::https://www.trumpstruth.org/statuses/42312",
+    "Trump::https://www.trumpstruth.org/statuses/42311"
   ]
 }
