@@ -1,20 +1,5 @@
 {
   "seen": [
-    "Trump::https://trumpstruth.org/statuses/41361",
-    "Trump::https://trumpstruth.org/statuses/41360",
-    "Trump::https://trumpstruth.org/statuses/41374",
-    "Trump::https://trumpstruth.org/statuses/41375",
-    "Trump::https://trumpstruth.org/statuses/41376",
-    "Trump::https://trumpstruth.org/statuses/41377",
-    "Trump::https://trumpstruth.org/statuses/41378",
-    "Trump::https://trumpstruth.org/statuses/41379",
-    "Trump::https://trumpstruth.org/statuses/41380",
-    "Trump::https://www.trumpstruth.org/statuses/41381",
-    "Trump::https://www.trumpstruth.org/statuses/41375",
-    "Trump::https://www.trumpstruth.org/statuses/41376",
-    "Trump::https://www.trumpstruth.org/statuses/41377",
-    "Trump::https://www.trumpstruth.org/statuses/41378",
-    "Trump::https://www.trumpstruth.org/statuses/41379",
     "Trump::https://www.trumpstruth.org/statuses/41380",
     "Trump::https://www.trumpstruth.org/statuses/41374",
     "Trump::https://www.trumpstruth.org/statuses/41373",
@@ -4999,6 +4984,21 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-423375",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000086312-26-000180",
     "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261016a.htm",
-    "Trump::https://www.trumpstruth.org/statuses/42385"
+    "Trump::https://www.trumpstruth.org/statuses/42385",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001683168-26-007929",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001683168-26-007927",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-116551",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-423870",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-116550",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000929638-26-003936",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-423790",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001140361-26-039887",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-423749",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-116525",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001692951-26-000193",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001628280-26-066087",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0000097216-26-000134",
+    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-032771",
+    "NIST::https://www.nist.gov/node/1922796"
   ]
 }
