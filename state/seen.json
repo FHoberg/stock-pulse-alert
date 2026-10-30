@@ -1,6 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-030124",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-106941",
     "Fed::https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260911a.htm",
     "NIST::https://www.nist.gov/node/1915926",
@@ -4999,6 +4998,7 @@
     "Trump::https://www.trumpstruth.org/statuses/42872",
     "Trump::https://www.trumpstruth.org/statuses/42873",
     "Trump::https://www.trumpstruth.org/statuses/42871",
-    "Trump::https://www.trumpstruth.org/statuses/42870"
+    "Trump::https://www.trumpstruth.org/statuses/42870",
+    "Trump::https://www.trumpstruth.org/statuses/42876"
   ]
 }
