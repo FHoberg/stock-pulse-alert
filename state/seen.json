@@ -1,8 +1,5 @@
 {
   "seen": [
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-103604",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001477932-26-005807",
-    "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001640334-26-001598",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-111034",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001437749-26-031247",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001104659-26-111032",
@@ -4999,6 +4996,9 @@
     "Trump::https://www.trumpstruth.org/statuses/43546",
     "SEC 13::urn:tag:sec.gov,2008:accession-number=0001193125-26-455784",
     "Trump::https://www.trumpstruth.org/statuses/43550",
-    "Trump::https://www.trumpstruth.org/statuses/43549"
+    "Trump::https://www.trumpstruth.org/statuses/43549",
+    "Trump::https://www.trumpstruth.org/statuses/43553",
+    "Trump::https://www.trumpstruth.org/statuses/43551",
+    "Trump::https://www.trumpstruth.org/statuses/43552"
   ]
 }
