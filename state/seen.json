@@ -1,8 +1,5 @@
 {
   "seen": [
-    "Trump::https://www.trumpstruth.org/statuses/41937",
-    "Trump::https://www.trumpstruth.org/statuses/41938",
-    "Trump::https://www.trumpstruth.org/statuses/41939",
     "Trump::https://www.trumpstruth.org/statuses/41940",
     "Trump::https://www.trumpstruth.org/statuses/41929",
     "Trump::https://www.trumpstruth.org/statuses/41930",
@@ -4999,6 +4996,9 @@
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001193125-26-458676",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-119026",
     "SEC 8-K::urn:tag:sec.gov,2008:accession-number=0001213900-26-119023",
-    "Trump::https://www.trumpstruth.org/statuses/43563"
+    "Trump::https://www.trumpstruth.org/statuses/43563",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+    "Trump::https://www.trumpstruth.org/statuses/43565",
+    "Trump::https://www.trumpstruth.org/statuses/43564"
   ]
 }
