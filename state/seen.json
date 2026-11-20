@@ -1,11 +1,5 @@
 {
   "seen": [
-    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-    "Trump::https://www.trumpstruth.org/statuses/42072",
-    "Trump::https://www.trumpstruth.org/statuses/42069",
-    "Trump::https://www.trumpstruth.org/statuses/42070",
-    "Trump::https://www.trumpstruth.org/statuses/42071",
-    "Trump::https://www.trumpstruth.org/statuses/42068",
     "Trump::https://www.trumpstruth.org/statuses/42067",
     "Trump::https://www.trumpstruth.org/statuses/42065",
     "Trump::https://www.trumpstruth.org/statuses/42066",
@@ -4999,6 +4993,12 @@
     "Trump::https://www.trumpstruth.org/statuses/43629",
     "NIST::https://www.nist.gov/node/1912201",
     "SEC 13::urn:tag:sec.gov,2008:accession-number=0001193125-26-468830",
-    "SEC 13::urn:tag:sec.gov,2008:accession-number=0001193125-26-468819"
+    "SEC 13::urn:tag:sec.gov,2008:accession-number=0001193125-26-468819",
+    "Trump::https://www.trumpstruth.org/statuses/43645",
+    "Trump::https://www.trumpstruth.org/statuses/43644",
+    "Trump::https://www.trumpstruth.org/statuses/43643",
+    "Trump::https://www.trumpstruth.org/statuses/43642",
+    "Trump::https://www.trumpstruth.org/statuses/43641",
+    "Trump::https://www.trumpstruth.org/statuses/43640"
   ]
 }
