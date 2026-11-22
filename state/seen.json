@@ -1,7 +1,5 @@
 {
   "seen": [
-    "Trump::https://www.trumpstruth.org/statuses/42094",
-    "Trump::https://www.trumpstruth.org/statuses/42095",
     "Trump::https://www.trumpstruth.org/statuses/42096",
     "Trump::https://www.trumpstruth.org/statuses/42092",
     "Trump::https://www.trumpstruth.org/statuses/42091",
@@ -4999,6 +4997,8 @@
     "Trump::https://www.trumpstruth.org/statuses/43653",
     "Trump::https://www.trumpstruth.org/statuses/43654",
     "Trump::https://www.trumpstruth.org/statuses/43655",
-    "Trump::https://www.trumpstruth.org/statuses/43656"
+    "Trump::https://www.trumpstruth.org/statuses/43656",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+    "Fed::https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm"
   ]
 }
